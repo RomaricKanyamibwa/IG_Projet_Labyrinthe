@@ -94,9 +94,49 @@ int main()
           }
         else
           {
+            do{
             alea=rand()%9;
+            if (alea<4 && energy>=5)
+                {
+                    move.value=rand()%4;
+                    jouer=1;
+                }
+
             switch(alea)
             {
+            case 0:
+                if(energy>=5)
+                    {
+                    move.value=rand()%4;
+                        if(move.value==data.posx)
+                            data.posx=(data.posx-1)%sizeY;
+                    jouer=1;
+                    }break;
+            case 1:
+                            if(energy>=5)
+                    {
+                    move.value=rand()%4;
+                        if(move.value==data.posx)
+                            data.posx=(data.posx+1)%sizeY;
+                    jouer=1;
+                    }break;
+            case 2:
+                            if(energy>=5)
+                    {
+                    move.value=rand()%4;
+                        if(move.value==data.posy)
+                            data.posy=(data.posy-1)%sizeX;
+                    jouer=1;
+                    }break;
+            case 3:
+                            if(energy>=5)
+                    {
+                    move.value=rand()%4;
+                        if(move.value==data.posy)
+                            data.posy=(data.posy-1)%sizeX;
+                    jouer=1;
+                    }break;
+
             case 4 :
                  if (!data.lab[(data.posx-1)%sizeY][data.posy])
                     {data.posx=(data.posx-1)%sizeY;
@@ -112,21 +152,15 @@ int main()
                     {data.posy=(data.posy-1)%sizeX;
                     jouer=1;
                     }break;
-            case 7 :if (!data.lab(data.posx][(data.posy+1)%sizeX])
-                    {data.posy=(data.posy+1)%sizeX;
-                    jouer=1;
+            case 7 :if (!data.lab[data.posx][(data.posy+1)%sizeX])
+                    {
+                        data.posy=(data.posy+1)%sizeX;
+                        jouer=1;
                     }break;
-            default :
-
-
-
-
+            default : printf(" ");
             }
-            if (alea<4 && energy>=5)
-                {
-                    move.value=rand()%4;
-
-                }
+            }while(!jouer);
+            printf("\nMove=%d\n",alea);
             move.type=alea;
             ret = sendMove(move);
           }
