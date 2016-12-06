@@ -68,7 +68,7 @@ int main()
 	t_data data;						/* a move */
 	int player;
 	int sizeX,sizeY;
-	int alea,energy;
+	int alea,jouer=0,energy;
 
 	/* connection to the server */
 	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
@@ -98,11 +98,24 @@ int main()
             switch(alea)
             {
             case 4 :
-                 if (data.lab[data.posx-1][data.posy])
+                 if (!data.lab[(data.posx-1)%sizeY][data.posy])
+                    {data.posx=(data.posx-1)%sizeY;
+                    jouer=1;
+                    }break;
 
             case 5 :
-            case 6 :
-            case 7 :
+            if (!data.lab[(data.posx+1)%sizeY][data.posy])
+                    {data.posx=(data.posx+1)%sizeY;
+                    jouer=1;
+                    }break;
+            case 6 :if (!data.lab[data.posx][(data.posy-1)%sizeX])
+                    {data.posy=(data.posy-1)%sizeX;
+                    jouer=1;
+                    }break;
+            case 7 :if (!data.lab(data.posx][(data.posy+1)%sizeX])
+                    {data.posy=(data.posy+1)%sizeX;
+                    jouer=1;
+                    }break;
             default :
 
 
