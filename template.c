@@ -68,7 +68,7 @@ int main()
 	t_data data;						/* a move */
 	int player;
 	int sizeX,sizeY;
-	int alea,jouer=0,energy;
+	int alea,jouer=0;
 
 	/* connection to the server */
 	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
@@ -79,10 +79,9 @@ int main()
 	waitForLabyrinth( "DO_NOTHING timeout=1000 tot=25", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
-	energy=player;
 	data=init_data(labData,sizeX,sizeY,player);
 
-    printf("\n");
+    //printf("\n");
      do{
         /* display the labyrinth */
         printLabyrinth();
@@ -95,74 +94,99 @@ int main()
         else
           {
             do{
-            alea=rand()%9;
-            if (alea<4 && energy>=5)
+                alea=rand()%8;
+                switch(alea)
                 {
-                    move.value=rand()%4;
-                    jouer=1;
+                case 0:
+                    if(data.energy>=5)
+                        {
+                            move.value=rand()%4;
+                            if(move.value==data.posx)
+                                data.posx=(sizeY+data.posx-1)%sizeY;
+                            data.energy-=5;
+                            jouer=1;
+                        }break;
+                case 1:
+                        if(data.energy>=5)
+                        {
+                            move.value=rand()%4;
+                            if(move.value==data.posx)
+                                data.posx=(data.posx+1)%sizeY;
+                            data.energy-=5;
+                            jouer=1;
+                        }break;
+                case 2:
+                        if(data.energy>=5)
+                        {
+                            move.value=rand()%4;
+                            if(move.value==data.posy)
+                                data.posy=(sizeX+data.posy-1)%sizeX;
+                            data.energy-=5;
+                            jouer=1;
+                        }break;
+                case 3:
+                        if(data.energy>=5)
+                        {
+                            move.value=rand()%4;
+                            if(move.value==data.posy)
+                                data.posy=(sizeX+data.posy-1)%sizeX;
+                            data.energy-=5;
+                            jouer=1;
+                        }break;
+
+                case 4 :
+                    //if ((data.posx-1)<0) casexy=sizeY-1;
+                    //else casxy=data.posx-1;
+                     if (!data.lab[(sizeY+data.posx-1)%sizeY][data.posy])
+                        {
+                            data.posx=(sizeY+data.posx-1)%sizeY;
+                            data.energy++;
+                            jouer=1;
+                        }break;
+
+                case 5 :
+                    if (!data.lab[(data.posx+1)%sizeY][data.posy])
+                        {
+                            data.posx=(data.posx+1)%sizeY;
+                            data.energy++;
+                            jouer=1;
+                        }break;
+                case 6 :
+                    if (!data.lab[data.posx][(sizeX+data.posy-1)%sizeX])
+                        {
+                            data.posy=(sizeX+data.posy-1)%sizeX;
+                            data.energy++;
+                            jouer=1;
+                        }break;
+                case 7 :
+                    if (!data.lab[data.posx][(data.posy+1)%sizeX])
+                        {
+                            data.posy=(data.posy+1)%sizeX;
+                            data.energy++;
+                            jouer=1;
+                        }break;
+                default : printf(" ");
                 }
 
-            switch(alea)
-            {
-            case 0:
-                if(energy>=5)
+                if(alea>-1 && alea<4)
                     {
-                    move.value=rand()%4;
-                        if(move.value==data.posx)
-                            data.posx=(data.posx-1)%sizeY;
-                    jouer=1;
-                    }break;
-            case 1:
-                            if(energy>=5)
-                    {
-                    move.value=rand()%4;
-                        if(move.value==data.posx)
-                            data.posx=(data.posx+1)%sizeY;
-                    jouer=1;
-                    }break;
-            case 2:
-                            if(energy>=5)
-                    {
-                    move.value=rand()%4;
-                        if(move.value==data.posy)
-                            data.posy=(data.posy-1)%sizeX;
-                    jouer=1;
-                    }break;
-            case 3:
-                            if(energy>=5)
-                    {
-                    move.value=rand()%4;
-                        if(move.value==data.posy)
-                            data.posy=(data.posy-1)%sizeX;
-                    jouer=1;
-                    }break;
+                    data.lab=init_lab(labData,sizeY,sizeX);
+                    }
 
-            case 4 :
-                 if (!data.lab[(data.posx-1)%sizeY][data.posy])
-                    {data.posx=(data.posx-1)%sizeY;
-                    jouer=1;
-                    }break;
-
-            case 5 :
-            if (!data.lab[(data.posx+1)%sizeY][data.posy])
-                    {data.posx=(data.posx+1)%sizeY;
-                    jouer=1;
-                    }break;
-            case 6 :if (!data.lab[data.posx][(data.posy-1)%sizeX])
-                    {data.posy=(data.posy-1)%sizeX;
-                    jouer=1;
-                    }break;
-            case 7 :if (!data.lab[data.posx][(data.posy+1)%sizeX])
-                    {
-                        data.posy=(data.posy+1)%sizeX;
-                        jouer=1;
-                    }break;
-            default : printf(" ");
-            }
             }while(!jouer);
-            printf("\nMove=%d\n",alea);
+            int i,j;
+            for(i=0;i<sizeY;i++)
+                {printf("\n");
+                for(j=0;j<sizeX;j++)
+                {
+                    printf("%d ",data.lab[i][j]);
+                }
+                }
+            printf("\nX=%d et Y=%d\n",data.posx,data.posy);
+            printf(" SizeY:%d Move=%d\n",sizeY,alea);
             move.type=alea;
             ret = sendMove(move);
+            jouer=0;
           }
           if ((player ==1 && ret == MOVE_WIN) || (player==0 && ret == MOVE_LOSE))
           printf("I lose the game\n");
