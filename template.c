@@ -43,6 +43,7 @@ char ** init_lab(char*labdata,int sizex,int sizey)
     }
     return lab;
 }
+
 t_data init_data(char*labdata,int sizex,int sizey,int player)
 {
 
@@ -59,6 +60,17 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
     return data;
 }
 
+char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
+{
+    int i,j;
+    for (i=0;i<sizex;i++)
+    {
+        for (j=0;j<sizey;j++)
+        lab[i][j]=labdata[i*sizey+j];
+    }
+    return lab;
+}
+
 int main()
 {
 	char labName[50];					/* name of the labyrinth */
@@ -69,6 +81,7 @@ int main()
 	int player;
 	int sizeX,sizeY;
 	int alea,jouer=0;
+	int rotate=0;
 
 	/* connection to the server */
 	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
@@ -104,6 +117,7 @@ int main()
                             if(move.value==data.posx)
                                 data.posx=(sizeY+data.posx-1)%sizeY;
                             data.energy-=5;
+                            rotate++;
                             jouer=1;
                         }break;
                 case 1:
@@ -113,6 +127,7 @@ int main()
                             if(move.value==data.posx)
                                 data.posx=(data.posx+1)%sizeY;
                             data.energy-=5;
+                            rotate++;
                             jouer=1;
                         }break;
                 case 2:
@@ -122,6 +137,7 @@ int main()
                             if(move.value==data.posy)
                                 data.posy=(sizeX+data.posy-1)%sizeX;
                             data.energy-=5;
+                            rotate++;
                             jouer=1;
                         }break;
                 case 3:
@@ -131,6 +147,7 @@ int main()
                             if(move.value==data.posy)
                                 data.posy=(sizeX+data.posy-1)%sizeX;
                             data.energy-=5;
+                            rotate++;
                             jouer=1;
                         }break;
 
@@ -168,22 +185,24 @@ int main()
                 default : printf(" ");
                 }
 
-                if(alea>-1 && alea<4)
+                if(rotate)
                     {
-                    data.lab=init_lab(labData,sizeY,sizeX);
+                        rotate--;
+                        data.lab=update_lab(data.lab,labData,sizeY,sizeX);
                     }
 
             }while(!jouer);
             int i,j;
             for(i=0;i<sizeY;i++)
-                {printf("\n");
-                for(j=0;j<sizeX;j++)
                 {
-                    printf("%d ",data.lab[i][j]);
+                    printf("\n");
+                    for(j=0;j<sizeX;j++)
+                    {
+                        printf("%d ",data.lab[i][j]);
+                    }
                 }
-                }
-            printf("\nX=%d et Y=%d\n",data.posx,data.posy);
-            printf(" SizeY:%d Move=%d\n",sizeY,alea);
+            printf("\nX=%d et Y=%d\n",data.posx,data.posy);//data.posx est le numero de la ligne et data.posY est le numero de la colonne
+            printf("SizeX:%d SizeY:%d Move=%d\n",sizeY,sizeY,alea);
             move.type=alea;
             ret = sendMove(move);
             jouer=0;
