@@ -24,8 +24,8 @@ typedef struct t_data
 {
     char** lab;
     char* map;
-    int posx;//coordones x du jouer (colonnes)
-    int posy;//coordones y du jouer (ligne)
+    int posx;
+    int posy;
     int energy;
     int posx_treas;
     int posy_treas;
@@ -85,14 +85,7 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
     return lab;
 }
 
-/*void rotation_ligne(char** laby,int type_rotation,int value,int sizex,int sizey)
-{
-    char** copy=laby;
-    int i,j;
-    for(i=0;i<sizey;i++)
-        for(j=0;j<sizex;j++)
-            laby[(sizeY+i+value)%sizeY][j]=copy[i][j];
-}*/
+
 
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {

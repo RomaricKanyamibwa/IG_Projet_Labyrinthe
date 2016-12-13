@@ -65,89 +65,89 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)//initialisation st
 
 void bouger_alea(t_data *data,char* labData,t_move *move,int sizeX,int sizeY)
 {
-  int alea=rand()%8;//type de mouvement
-  int jouer=0;//possibilite mouvement
-  do{
- switch(alea)
+    int alea=rand()%8;//type de mouvement
+    int jouer=0;//possibilite mouvement
+        do{
+        switch(alea)
+        {
+            case 0://case de 0 a 3 pour rotation
+                if(data->energy>=5)
                 {
-                case 0://case de 0 a 3 pour rotation
-                    if(data->energy>=5)
-                        {
-                            move->value=rand()%sizeY;
-                            if(move->value==data->posx)
-                                data->posx=(sizeY+data->posx-1)%sizeY;
-                            data->energy-=5;
-                            jouer=1;
-                        }break;
-                case 1:
-                        if(data->energy>=5)
-                        {
-                            move->value=rand()%sizeY;
-                            if(move->value==data->posx)
-                                data->posx=(data->posx+1)%sizeY;
-                            data->energy-=5;
-                            jouer=1;
-                        }break;
-                case 2:
-                        if(data->energy>=5)
-                        {
-                            move->value=rand()%sizeX;
-                            if(move->value==data->posy)
-                                data->posy=(sizeX+data->posy-1)%sizeX;
-                            data->energy-=5;
-                            jouer=1;
-                        }break;
-                case 3:
-                        if(data->energy>=5)
-                        {
-                            move->value=rand()%sizeX;
-                            if(move->value==data->posy)
-                                data->posy=(sizeX+data->posy-1)%sizeX;
-                            data->energy-=5;
-                            jouer=1;
-                        }break;
+                    move->value=rand()%sizeY;
+                    if(move->value==data->posx)
+                    data->posx=(sizeY+data->posx-1)%sizeY;
+                    data->energy-=5;
+                    jouer=1;
+                }break;
+            case 1:
+                if(data->energy>=5)
+                {
+                    move->value=rand()%sizeY;
+                    if(move->value==data->posx)
+                    data->posx=(data->posx+1)%sizeY;
+                    data->energy-=5;
+                    jouer=1;
+                }break;
+            case 2:
+                if(data->energy>=5)
+                {
+                    move->value=rand()%sizeX;
+                    if(move->value==data->posy)
+                    data->posy=(sizeX+data->posy-1)%sizeX;
+                    data->energy-=5;
+                    jouer=1;
+                }break;
+            case 3:
+                if(data->energy>=5)
+                {
+                    move->value=rand()%sizeX;
+                    if(move->value==data->posy)
+                    data->posy=(sizeX+data->posy-1)%sizeX;
+                    data->energy-=5;
+                    jouer=1;
+                }break;
 
                 case 4 : //case de 4 a 7 pour mouvement classique
-                    //if ((data->posx-1)<0) casexy=sizeY-1;
-                    //else casxy=data->posx-1;
-                     if (!data->lab[(sizeY+data->posx-1)%sizeY][data->posy])
-                        {
-                            data->posx=(sizeY+data->posx-1)%sizeY;
-                            data->energy++;
-                            jouer=1;
-                        }break;
+                //if ((data->posx-1)<0) casexy=sizeY-1;
+                //else casxy=data->posx-1;
+                if (!data->lab[(sizeY+data->posx-1)%sizeY][data->posy])
+                {
+                    data->posx=(sizeY+data->posx-1)%sizeY;
+                    data->energy++;
+                    jouer=1;
+                }break;
 
-                case 5 :
-                    if (!data->lab[(data->posx+1)%sizeY][data->posy])
-                        {
-                            data->posx=(data->posx+1)%sizeY;
-                            data->energy++;
-                            jouer=1;
-                        }break;
-                case 6 :
-                    if (!data->lab[data->posx][(sizeX+data->posy-1)%sizeX])
-                        {
-                            data->posy=(sizeX+data->posy-1)%sizeX;
-                            data->energy++;
-                            jouer=1;
-                        }break;
-                case 7 :
-                    if (!data->lab[data->posx][(data->posy+1)%sizeX])
-                        {
-                            data->posy=(data->posy+1)%sizeX;
-                            data->energy++;
-                            jouer=1;
-                        }break;
-                default : printf(" ");
-                }
- alea=rand()%8;//ancien mouvement non possible
-            }while(!jouer);
-                if(alea>-1 && alea<4)//mise a jour data->lab si rotation
-                    {
-		      copie_lab(data->lab,labData,sizeY,sizeX);
-                    }
-		jouer=0;
-		printf(" SizeY:%d Move=%d\n",sizeY,alea);//mouvement effectué
+            case 5 :
+                if (!data->lab[(data->posx+1)%sizeY][data->posy])
+                {
+                    data->posx=(data->posx+1)%sizeY;
+                    data->energy++;
+                    jouer=1;
+                }break;
+            case 6 :
+                if (!data->lab[data->posx][(sizeX+data->posy-1)%sizeX])
+                {
+                    data->posy=(sizeX+data->posy-1)%sizeX;
+                    data->energy++;
+                    jouer=1;
+                }break;
+            case 7 :
+                if (!data->lab[data->posx][(data->posy+1)%sizeX])
+                {
+                    data->posy=(data->posy+1)%sizeX;
+                    data->energy++;
+                    jouer=1;
+                }break;
+            default : printf(" ");
+        }
+        alea=rand()%8;//ancien mouvement non possible
+    }while(!jouer);
+    if(alea>-1 && alea<4)//mise a jour data->lab si rotation
+    {
+        copie_lab(data->lab,labData,sizeY,sizeX);
+    }
+    jouer=0;
+    printf(" SizeY:%d Move=%d\n",sizeY,alea);//mouvement effectué
 }
 
 int main()
@@ -184,7 +184,7 @@ int main()
           }
         else
           {
-	    bouger_alea(&data,labData,&move,sizeX,sizeY);//mouvement aleatoire	    
+	    bouger_alea(&data,labData,&move,sizeX,sizeY);//mouvement aleatoire
 	    printf("\nX=%d et Y=%d\n",data.posx,data.posy);//position du player
 
             ret = sendMove(move);
