@@ -88,24 +88,24 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_line(char** laby,int type_rotation,int value,int sizey)
+void rotation_column(char** laby,int type_rotation,int value,int sizex,int sizey)
 {
     char** copy=laby;
-    int i,j;
-    for(i=0;i<sizey;i++)
-        for(j=0;j<sizex;j++)
-            laby[(sizey+i+value)%sizey][j]=copy[i][j];
+    char* temp=laby[0][value];
+    int j;
+    for(j=0;j<sizex;j++)
+        laby[(sizey+i+type_rotation)%sizey][value]=copy[j][value];
 }
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_column(char** laby,int type_rotation,int value,int sizex)
+void rotation_line(char** laby,int type_rotation,int value,int sizex,int sizey)
 {
     char** copy=laby;
-    int i,j;
-    for(i=0;i<sizey;i++)
-        for(j=0;j<sizex;j++)
-            laby[i][(sizex+j+value)%sizex]=copy[i][j];
+    char* temp=laby[value][0];
+    int j;
+    for(j=0;j<sizex;j++)
+        laby[value][(sizex+j+type_rotation)%sizex]=copy[value][j];
 }
 
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
@@ -118,17 +118,18 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     case 0:
         if(data->energy>=5)
             {
-                move->value=rand()%4;
+                move->value=rand()%sizeY;
                 if(move->value==data->line)
                     data->line=(sizeY+data->line-1)%sizeY;
                 data->energy-=5;
+                //rotation_line(data->lab,+1,move->value,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
     case 1:
             if(data->energy>=5)
             {
-                move->value=rand()%4;
+                move->value=rand()%sizeY;
                 if(move->value==data->line)
                     data->line=(data->line+1)%sizeY;
                 data->energy-=5;
@@ -138,7 +139,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     case 2:
             if(data->energy>=5)
             {
-                move->value=rand()%4;
+                move->value=rand()%sizeX;
                 if(move->value==data->column)
                     data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
@@ -148,7 +149,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     case 3:
             if(data->energy>=5)
             {
-                move->value=rand()%4;
+                move->value=rand()%sizeX;
                 if(move->value==data->column)
                     data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
@@ -198,7 +199,18 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     return alea;
 }
 
-
+void print_laby(t_data data,int sizeX,int sizeY)
+{
+    int i,j;
+    for(i=0;i<sizeY;i++)
+        {
+            printf("\n");
+            for(j=0;j<sizeX;j++)
+            {
+                printf("%d ",data.lab[i][j]);
+            }
+        }
+}
 
 
 int main()
@@ -242,17 +254,9 @@ int main()
             alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY);
 
             }while(!jouer);
-            int i,j;
             data.map=labData;
-            for(i=0;i<sizeY;i++)
-                {
-                    printf("\n");
-                    for(j=0;j<sizeX;j++)
-                    {
-                        printf("%d ",data.lab[i][j]);
-                    }
-                }
-            printf("\nX=%d et Y=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
+            print_laby(data,sizeX,sizeY);
+            printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
             printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,alea,move.value);
             move.type=alea;
             ret = sendMove(move);
@@ -265,8 +269,6 @@ int main()
 
 	/* we do not forget to free the allocated array */
 	free(labData);
-
-
 
 	/* end the connection, because we are polite */
 	closeConnection();
