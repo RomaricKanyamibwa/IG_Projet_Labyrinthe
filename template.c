@@ -91,10 +91,11 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
 void rotation_column(char** laby,int type_rotation,int value,int sizex,int sizey)
 {
     char** copy=laby;
-    char* temp=laby[0][value];
+    char temp=laby[0][value];
     int j;
     for(j=0;j<sizex;j++)
-        laby[(sizey+i+type_rotation)%sizey][value]=copy[j][value];
+        laby[(sizey+j+type_rotation)%sizey][value]=copy[j][value];
+    laby[sizey][value]=temp;
 }
 
 //sizeY numero de lignes
@@ -102,10 +103,11 @@ void rotation_column(char** laby,int type_rotation,int value,int sizex,int sizey
 void rotation_line(char** laby,int type_rotation,int value,int sizex,int sizey)
 {
     char** copy=laby;
-    char* temp=laby[value][0];
+    char temp=laby[value][0];
     int j;
     for(j=0;j<sizex;j++)
         laby[value][(sizex+j+type_rotation)%sizex]=copy[value][j];
+    laby[value][sizex-1]=temp;
 }
 
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
