@@ -14,7 +14,8 @@
 #include "labyrinthAPI.h"
 #include <unistd.h>
 
-
+//sizeY numero de lignes
+//sizeX numero de colonnes
 
 extern int debug;	/* hack to enable debug messages */
 
@@ -24,11 +25,11 @@ typedef struct t_data
 {
     char** lab;
     char* map;
-    int posx;//coordones x du jouer (colonnes)
-    int posy;//coordones y du jouer (ligne)
+    int line;//coordones x du jouer (lignes)
+    int column;//coordones y du jouer (colonnes)
     int energy;
-    int posx_treas;
-    int posy_treas;
+    int line_treas;
+    int column_treas;
 }t_data;
 
 
@@ -59,14 +60,14 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
 
     t_data data;
     data.lab=init_lab(labdata,sizey,sizex);
-    data.posx=sizey/2;
+    data.line=sizey/2;
     data.energy=player;
     if(player)
-        data.posy=sizex-1;
+        data.column=sizex-1;
     else
-        data.posy=0;
-    data.posy_treas=sizex/2;
-    data.posx_treas=sizey/2;
+        data.column=0;
+    data.column_treas=sizex/2;
+    data.line_treas=sizey/2;
     return data;
 }
 
@@ -77,22 +78,35 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
 char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
 {
     int i,j;
-    for (i=0;i<sizex;i++)
+    for (i=0;i<sizey;i++)
     {
-        for (j=0;j<sizey;j++)
-        lab[i][j]=labdata[i*sizey+j];
+        for (j=0;j<sizex;j++)
+        lab[i][j]=labdata[i*sizex+j];
     }
     return lab;
 }
 
-/*void rotation_ligne(char** laby,int type_rotation,int value,int sizex,int sizey)
+//sizeY numero de lignes
+//sizeX numero de colonnes
+void rotation_line(char** laby,int type_rotation,int value,int sizey)
 {
     char** copy=laby;
     int i,j;
     for(i=0;i<sizey;i++)
         for(j=0;j<sizex;j++)
-            laby[(sizeY+i+value)%sizeY][j]=copy[i][j];
-}*/
+            laby[(sizey+i+value)%sizey][j]=copy[i][j];
+}
+
+//sizeY numero de lignes
+//sizeX numero de colonnes
+void rotation_column(char** laby,int type_rotation,int value,int sizex)
+{
+    char** copy=laby;
+    int i,j;
+    for(i=0;i<sizey;i++)
+        for(j=0;j<sizex;j++)
+            laby[i][(sizex+j+value)%sizex]=copy[i][j];
+}
 
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
@@ -105,8 +119,8 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
         if(data->energy>=5)
             {
                 move->value=rand()%4;
-                if(move->value==data->posx)
-                    data->posx=(sizeY+data->posx-1)%sizeY;
+                if(move->value==data->line)
+                    data->line=(sizeY+data->line-1)%sizeY;
                 data->energy-=5;
                 rotate++;
                 *jouer=1;
@@ -115,8 +129,8 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%4;
-                if(move->value==data->posx)
-                    data->posx=(data->posx+1)%sizeY;
+                if(move->value==data->line)
+                    data->line=(data->line+1)%sizeY;
                 data->energy-=5;
                 rotate++;
                 *jouer=1;
@@ -125,8 +139,8 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%4;
-                if(move->value==data->posy)
-                    data->posy=(sizeX+data->posy-1)%sizeX;
+                if(move->value==data->column)
+                    data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
                 rotate++;
                 *jouer=1;
@@ -135,41 +149,41 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%4;
-                if(move->value==data->posy)
-                    data->posy=(sizeX+data->posy-1)%sizeX;
+                if(move->value==data->column)
+                    data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
                 rotate++;
                 *jouer=1;
             }break;
 
     case 4 :
-        //if ((data->posx-1)<0) casexy=sizeY-1;
-        //else casxy=data->posx-1;
-         if (!data->lab[(sizeY+data->posx-1)%sizeY][data->posy])
+        //if ((data->line-1)<0) casexy=sizeY-1;
+        //else casxy=data->line-1;
+         if (!data->lab[(sizeY+data->line-1)%sizeY][data->column])
             {
-                data->posx=(sizeY+data->posx-1)%sizeY;
+                data->line=(sizeY+data->line-1)%sizeY;
                 data->energy++;
                 *jouer=1;
             }break;
 
     case 5 :
-        if (!data->lab[(data->posx+1)%sizeY][data->posy])
+        if (!data->lab[(data->line+1)%sizeY][data->column])
             {
-                data->posx=(data->posx+1)%sizeY;
+                data->line=(data->line+1)%sizeY;
                 data->energy++;
                 *jouer=1;
             }break;
     case 6 :
-        if (!data->lab[data->posx][(sizeX+data->posy-1)%sizeX])
+        if (!data->lab[data->line][(sizeX+data->column-1)%sizeX])
             {
-                data->posy=(sizeX+data->posy-1)%sizeX;
+                data->column=(sizeX+data->column-1)%sizeX;
                 data->energy++;
                 *jouer=1;
             }break;
     case 7 :
-        if (!data->lab[data->posx][(data->posy+1)%sizeX])
+        if (!data->lab[data->line][(data->column+1)%sizeX])
             {
-                data->posy=(data->posy+1)%sizeX;
+                data->column=(data->column+1)%sizeX;
                 data->energy++;
                 *jouer=1;
             }break;
@@ -179,7 +193,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     if(rotate)
         {
             rotate--;
-            data->lab=update_lab(data->lab,labData,sizeY,sizeX);
+            data->lab=update_lab(data->lab,labData,sizeX,sizeY);
         }
     return alea;
 }
@@ -195,12 +209,12 @@ int main()
 	t_move move;
 	t_data data;						/* a move */
 	int player;
-	int sizeX,sizeY;
-	int alea,jouer=0;
+	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
+    int alea,jouer=0;
 	//int rotate=0;
 
 	/* connection to the server */
-	connectToServer( "pc4001.polytech.upmc.fr", 1234, "Paola");
+	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
 	//connectToServer( "localhost", 1234, "prog_template");
 
 
@@ -238,7 +252,7 @@ int main()
                         printf("%d ",data.lab[i][j]);
                     }
                 }
-            printf("\nX=%d et Y=%d\n",data.posx,data.posy);//data.posx est le numero de la ligne et data.posY est le numero de la colonne
+            printf("\nX=%d et Y=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
             printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,alea,move.value);
             move.type=alea;
             ret = sendMove(move);
