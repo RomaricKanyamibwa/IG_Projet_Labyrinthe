@@ -88,25 +88,25 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_column(char** laby,int type_rotation,int value,int sizex,int sizey)
+void rotation_column(char** laby,int value,int sizex,int sizey)
 {
     char** copy=laby;
     char temp=laby[0][value];
     int j;
     for(j=0;j<sizex;j++)
-        laby[(sizey+j+type_rotation)%sizey][value]=copy[j][value];
-    laby[sizey][value]=temp;
+        laby[(sizey+j+1)%sizey][value]=copy[j][value];
+    laby[sizey-1][value]=temp;
 }
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_line(char** laby,int type_rotation,int value,int sizex,int sizey)
+void rotation_line_left(char** laby,int value,int sizex,int sizey)
 {
     char** copy=laby;
     char temp=laby[value][0];
     int j;
     for(j=0;j<sizex;j++)
-        laby[value][(sizex+j+type_rotation)%sizex]=copy[value][j];
+        laby[value][(sizex+j+1)%sizex]=copy[value][j];
     laby[value][sizex-1]=temp;
 }
 
