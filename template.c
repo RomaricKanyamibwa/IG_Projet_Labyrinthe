@@ -13,12 +13,10 @@
 #include <stdlib.h>
 #include "labyrinthAPI.h"
 #include <unistd.h>
+//#include "template.h"
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-
-extern int debug;	/* hack to enable debug messages */
-
 
 
 typedef struct t_data
@@ -32,6 +30,9 @@ typedef struct t_data
     int column_treas;
 }t_data;
 
+
+extern int debug;	/* hack to enable debug messages */
+void print_laby(t_data data,int sizeX,int sizeY);
 
 
 char ** init_lab(char*labdata,int sizex,int sizey)
@@ -105,13 +106,10 @@ char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
     }
     return dest;
 }
-/**
-//sizeY numero de lignes
-//sizeX numero de colonnes
+
 void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(laby,sizex,sizey);//copy oflaby;
-    memcpy(copy,laby, sizeof(char)*sizex*sizey);
+    char **copy=laby;//copy of laby;
     char temp=laby[0][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -123,19 +121,18 @@ void rotation_column_up(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(laby,sizex,sizey);//copy of laby;
+    char **copy=laby;//copy of laby;
     char temp=laby[value][0];
-    memcpy(copy,laby, sizeof(char)*sizex*sizey);
     int j;
     for(j=0;j<sizex;j++)
         laby[value][(sizex+j-1)%sizex]=copy[value][j];
     laby[value][sizex-1]=temp;
 }
 
+
 void rotation_column_down(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(laby,sizex,sizey);//copy oflaby;
-    memcpy(copy,laby, sizeof(char)*sizex*sizey);
+    char **copy=laby ;//copy oflaby;
     char temp=laby[sizey-1][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -147,15 +144,15 @@ void rotation_column_down(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_right(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(laby,sizex,sizey);//=laby;
+    char **copy=laby;//copy of laby;
     char temp=laby[value][sizex-1];
-    memcpy(copy,laby, sizeof(char)*16);
     int j;
     for(j=0;j<sizex;j++)
         laby[value][(sizex+j+1)%sizex]=copy[value][j];
     laby[value][0]=temp;
 }
-**/
+
+
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
 
@@ -170,7 +167,11 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 if(move->value==data->line)
                     data->line=(sizeY+data->line-1)%sizeY;
                 data->energy-=5;
-                //rotation_line(data->lab,+1,move->value,sizeX,sizeY);
+                printf("Linerotate left\n");
+                print_laby(*data,sizeX,sizeY);
+                printf("\n");
+                rotation_line_left(data->lab,move->value,sizeX,sizeY);
+                print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -181,6 +182,11 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 if(move->value==data->line)
                     data->line=(data->line+1)%sizeY;
                 data->energy-=5;
+                printf("Linerotate right \n");
+                print_laby(*data,sizeX,sizeY);
+                printf("\n");
+                rotation_line_right(data->lab,move->value,sizeX,sizeY);
+                print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -191,6 +197,11 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 if(move->value==data->column)
                     data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
+                printf("Columnrotate up\n");
+                print_laby(*data,sizeX,sizeY);
+                printf("\n");
+                rotation_column_up(data->lab,move->value,sizeX,sizeY);
+                print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -201,6 +212,11 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 if(move->value==data->column)
                     data->column=(sizeX+data->column+1)%sizeX;
                 data->energy-=5;
+                printf("Columnrotate down\n");
+                print_laby(*data,sizeX,sizeY);
+                printf("\n");
+                rotation_column_down(data->lab,move->value,sizeX,sizeY);
+                print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -239,13 +255,9 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     default : printf(" ");
     }
 
-    if(rotate)
-        {
-            rotate--;
-            data->lab=update_lab(data->lab,labData,sizeX,sizeY);
-        }
     return alea;
 }
+
 
 void print_laby(t_data data,int sizeX,int sizeY)
 {
@@ -303,7 +315,7 @@ int main()
             alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY);
 
             }while(!jouer);
-            data.map=labData;
+            printf("\n");
             print_laby(data,sizeX,sizeY);
             printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
             printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,alea,move.value);
