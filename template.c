@@ -36,9 +36,8 @@ typedef struct t_data
 
 char ** init_lab(char*labdata,int sizex,int sizey)
 {
-    char**lab=(char**)malloc(sizeof(char*)*sizex);
+    char**lab=(char**)calloc(sizex,sizeof(char*));
     int i,j;
-    debug=1;
     for (i=0;i<sizex;i++)
     {
         lab[i]=calloc(sizey,sizeof(char));
@@ -51,6 +50,16 @@ char ** init_lab(char*labdata,int sizex,int sizey)
     return lab;
 }
 
+char** alloc_2D_array(char**labdata,int sizex,int sizey)
+{
+    char**lab=(char**)calloc(sizex,sizeof(char*));
+    int i;
+    for (i=0;i<sizex;i++)
+    {
+        lab[i]=calloc(sizey,sizeof(char));
+    }
+    return lab;
+}
 
 
 
@@ -88,28 +97,54 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_column(char** laby,int value,int sizex,int sizey)
+void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char** copy=laby;
+    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//copy oflaby;
+    memcpy(copy,laby, sizeof(char)*sizex*sizey);
     char temp=laby[0][value];
     int j;
-    for(j=0;j<sizex;j++)
-        laby[(sizey+j+1)%sizey][value]=copy[j][value];
+    for(j=0;j<sizey;j++)
+        laby[(sizey+j-1)%sizey][value]=copy[j][value];
     laby[sizey-1][value]=temp;
 }
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
-void rotation_line_left(char** laby,int value,int sizex,int sizey)
+void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char** copy=laby;
+    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//copy of laby;
     char temp=laby[value][0];
+    memcpy(copy,laby, sizeof(char)*sizex*sizey);
     int j;
     for(j=0;j<sizex;j++)
-        laby[value][(sizex+j+1)%sizex]=copy[value][j];
+        laby[value][(sizex+j-1)%sizex]=copy[value][j];
     laby[value][sizex-1]=temp;
 }
 
+
+void rotation_column_down(char **laby,int value,int sizex,int sizey)
+{
+    char *copy=alloc_2D_array(char **laby,sizex,int sizey);//copy oflaby;
+    memcpy(copy,laby, sizeof(char)*sizex*sizey);
+    char temp=laby[sizey-1][value];
+    int j;
+    for(j=0;j<sizey;j++)
+        laby[(sizey+j+1)%sizey][value]=copy[j][value];
+    laby[0][value]=temp;
+}
+
+//sizeY numero de lignes
+//sizeX numero de colonnes
+void rotation_line_right(char **laby,int value,int sizex,int sizey)
+{
+    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//=laby;
+    char temp=laby[value][sizex-1];
+    memcpy(copy,laby, sizeof(char)*16);
+    int j;
+    for(j=0;j<sizex;j++)
+        laby[value][(sizex+j+1)%sizex]=copy[value][j];
+    laby[value][0]=temp;
+}
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
 
@@ -117,7 +152,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
     int rotate=0;
     switch(alea)
     {
-    case 0:
+    case 0://line rotation to the left
         if(data->energy>=5)
             {
                 move->value=rand()%sizeY;
@@ -128,7 +163,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 rotate++;
                 *jouer=1;
             }break;
-    case 1:
+    case 1://line rotation to the right
             if(data->energy>=5)
             {
                 move->value=rand()%sizeY;
@@ -138,7 +173,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 rotate++;
                 *jouer=1;
             }break;
-    case 2:
+    case 2://column rotation up
             if(data->energy>=5)
             {
                 move->value=rand()%sizeX;
@@ -148,18 +183,18 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 rotate++;
                 *jouer=1;
             }break;
-    case 3:
+    case 3://column rotation down
             if(data->energy>=5)
             {
                 move->value=rand()%sizeX;
                 if(move->value==data->column)
-                    data->column=(sizeX+data->column-1)%sizeX;
+                    data->column=(sizeX+data->column+1)%sizeX;
                 data->energy-=5;
                 rotate++;
                 *jouer=1;
             }break;
 
-    case 4 :
+    case 4 ://Up movemnt
         //if ((data->line-1)<0) casexy=sizeY-1;
         //else casxy=data->line-1;
          if (!data->lab[(sizeY+data->line-1)%sizeY][data->column])
@@ -169,21 +204,21 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
                 *jouer=1;
             }break;
 
-    case 5 :
+    case 5 ://down movement
         if (!data->lab[(data->line+1)%sizeY][data->column])
             {
                 data->line=(data->line+1)%sizeY;
                 data->energy++;
                 *jouer=1;
             }break;
-    case 6 :
+    case 6 ://movement to the left
         if (!data->lab[data->line][(sizeX+data->column-1)%sizeX])
             {
                 data->column=(sizeX+data->column-1)%sizeX;
                 data->energy++;
                 *jouer=1;
             }break;
-    case 7 :
+    case 7 ://movement to the right
         if (!data->lab[data->line][(data->column+1)%sizeX])
             {
                 data->column=(data->column+1)%sizeX;
@@ -225,6 +260,7 @@ int main()
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0;
+    debug=1;
 	//int rotate=0;
 
 	/* connection to the server */

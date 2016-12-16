@@ -90,26 +90,29 @@ int main()
     //printf("%s",buff[4]);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_column_up(buff,0,4,4);
+    rotation_column_down(buff,0,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_column_up(buff,0,4,4);
+    rotation_column_down(buff,0,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_column_up(buff,0,4,4);
+    rotation_column_down(buff,0,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_column_up(buff,0,4,4);
+    rotation_column_down(buff,0,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_line_left(buff,1,4,4);
+    /*rotation_line_right(buff,1,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_line_left(buff,1,4,4);
+    rotation_line_right(buff,1,4,4);
     print_laby(buff,4,4);
     printf("\n");
-    rotation_line_left(buff,1,4,4);
+    rotation_line_right(buff,1,4,4);
     print_laby(buff,4,4);
     printf("\n");
+    rotation_line_right(buff,1,4,4);
+    print_laby(buff,4,4);
+    printf("\n");*/
     return 1;
 }
