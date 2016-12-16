@@ -95,11 +95,22 @@ char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
     return lab;
 }
 
+char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
+{
+    int i,j;
+    for (i=0;i<sizey;i++)
+    {
+        for (j=0;j<sizex;j++)
+        dest[i][j]=sourc[i][j];
+    }
+    return dest;
+}
+/**
 //sizeY numero de lignes
 //sizeX numero de colonnes
 void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//copy oflaby;
+    char **copy=alloc_2D_array(laby,sizex,sizey);//copy oflaby;
     memcpy(copy,laby, sizeof(char)*sizex*sizey);
     char temp=laby[0][value];
     int j;
@@ -112,7 +123,7 @@ void rotation_column_up(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//copy of laby;
+    char **copy=alloc_2D_array(laby,sizex,sizey);//copy of laby;
     char temp=laby[value][0];
     memcpy(copy,laby, sizeof(char)*sizex*sizey);
     int j;
@@ -121,10 +132,9 @@ void rotation_line_left(char **laby,int value,int sizex,int sizey)
     laby[value][sizex-1]=temp;
 }
 
-
 void rotation_column_down(char **laby,int value,int sizex,int sizey)
 {
-    char *copy=alloc_2D_array(char **laby,sizex,int sizey);//copy oflaby;
+    char **copy=alloc_2D_array(laby,sizex,sizey);//copy oflaby;
     memcpy(copy,laby, sizeof(char)*sizex*sizey);
     char temp=laby[sizey-1][value];
     int j;
@@ -137,7 +147,7 @@ void rotation_column_down(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_right(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(char **laby,sizex,int sizey);//=laby;
+    char **copy=alloc_2D_array(laby,sizex,sizey);//=laby;
     char temp=laby[value][sizex-1];
     memcpy(copy,laby, sizeof(char)*16);
     int j;
@@ -145,6 +155,7 @@ void rotation_line_right(char **laby,int value,int sizex,int sizey)
         laby[value][(sizex+j+1)%sizex]=copy[value][j];
     laby[value][0]=temp;
 }
+**/
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
 
