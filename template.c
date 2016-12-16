@@ -51,7 +51,7 @@ char ** init_lab(char*labdata,int sizex,int sizey)
     return lab;
 }
 
-char** alloc_2D_array(char**labdata,int sizex,int sizey)
+char** alloc_2D_array(int sizex,int sizey)
 {
     char**lab=(char**)calloc(sizex,sizeof(char*));
     int i;
@@ -109,7 +109,8 @@ char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
 
 void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[0][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -121,7 +122,8 @@ void rotation_column_up(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[value][0];
     int j;
     for(j=0;j<sizex;j++)
@@ -132,7 +134,8 @@ void rotation_line_left(char **laby,int value,int sizex,int sizey)
 
 void rotation_column_down(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby ;//copy oflaby;
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[sizey-1][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -144,7 +147,8 @@ void rotation_column_down(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_right(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[value][sizex-1];
     int j;
     for(j=0;j<sizex;j++)
