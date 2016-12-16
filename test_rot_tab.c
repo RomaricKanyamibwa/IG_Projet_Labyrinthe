@@ -49,10 +49,9 @@ char ** copy_2Dtab( char** dest,char** sourc,int sizex,int sizey)
     return dest;
 }
 
-/**void rotation_column_up(char **laby,int value,int sizex,int sizey)
+void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(sizex,sizey);//copy oflaby;
-    memcpy(copy,laby, sizeof(char)*sizex*sizey);
+    char **copy=laby;//copy of laby;
     char temp=laby[0][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -64,40 +63,37 @@ char ** copy_2Dtab( char** dest,char** sourc,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    char **copy=laby;//copy of laby;
     char temp=laby[value][0];
-    memcpy(copy,laby, sizeof(char)*sizex*sizey);
     int j;
     for(j=0;j<sizex;j++)
         laby[value][(sizex+j-1)%sizex]=copy[value][j];
     laby[value][sizex-1]=temp;
 }
-**/
+
 
 void rotation_column_down(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(sizex,sizey) ;//copy oflaby;
-    //copy=copy_2Dtab(copy,laby,sizex,sizey);
+    char **copy=laby ;//copy oflaby;
     char temp=laby[sizey-1][value];
     int j;
     for(j=0;j<sizey;j++)
         laby[(sizey+j+1)%sizey][value]=copy[j][value];
     laby[0][value]=temp;
 }
-/**
+
 //sizeY numero de lignes
 //sizeX numero de colonnes
 void rotation_line_right(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=alloc_2D_array(sizex,sizey);//=laby;
+    char **copy=laby;//copy of laby;
     char temp=laby[value][sizex-1];
-    memcpy(copy,laby, sizeof(char)*16);
     int j;
     for(j=0;j<sizex;j++)
         laby[value][(sizex+j+1)%sizex]=copy[value][j];
     laby[value][0]=temp;
 }
-**/
+
 int main()
 {
     //FILE* f=fopen("laby.txt","r" );
@@ -106,9 +102,9 @@ int main()
     //char* buff=malloc(sizeof(char)*2);
     //char* tab=malloc(sizeof(char)*17*17);
     char** buff0=alloc_2D_array(2,2); //[4][4]//={{0,1,1,0},{0,1,1,0},{0,1,1,1},{1,1,0,0}};
-    buff0[0][0]=0;
+    buff0[0][0]=1;
     buff0[0][1]=0;
-    buff0[1][0]=1;
+    buff0[1][0]=0;
     buff0[1][1]=1;
     char **buff=alloc_2D_array(2,2);
     buff=copy_2Dtab(buff,buff0,2,2);
@@ -132,9 +128,6 @@ int main()
     rotation_column_down(buff,0,2,2);
     print_laby(buff,2,2);
     printf("\n");
-    /*rotation_line_right(buff,1,2,2);
-    print_laby(buff,2,2);
-    printf("\n");
     rotation_line_right(buff,1,2,2);
     print_laby(buff,2,2);
     printf("\n");
@@ -143,7 +136,10 @@ int main()
     printf("\n");
     rotation_line_right(buff,1,2,2);
     print_laby(buff,2,2);
-    printf("\n");*/
+    printf("\n");
+    rotation_line_right(buff,1,2,2);
+    print_laby(buff,2,2);
+    printf("\n");
     return 1;
 }
 
