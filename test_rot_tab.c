@@ -27,18 +27,19 @@ void print_laby(char **lab,int sizeX,int sizeY)
         }
 }
 
+
 char** alloc_2D_array(int sizex,int sizey)
 {
-    char**lab=(char**)malloc(sizex*sizeof(char*));
+    char**lab=(char**)calloc(sizex,sizeof(char*));
     int i;
     for (i=0;i<sizex;i++)
     {
-        lab[i]=malloc(sizey*sizeof(char));
+        lab[i]=calloc(sizey,sizeof(char));
     }
     return lab;
 }
 
-char ** copy_2Dtab( char** dest,char** sourc,int sizex,int sizey)
+char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
 {
     int i,j;
     for (i=0;i<sizey;i++)
@@ -51,7 +52,9 @@ char ** copy_2Dtab( char** dest,char** sourc,int sizex,int sizey)
 
 void rotation_column_up(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+    printf("\nColumn %d up",value);
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[0][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -63,7 +66,9 @@ void rotation_column_up(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_left(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+     printf("\nLine %d left",value);
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[value][0];
     int j;
     for(j=0;j<sizex;j++)
@@ -74,7 +79,9 @@ void rotation_line_left(char **laby,int value,int sizex,int sizey)
 
 void rotation_column_down(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby ;//copy oflaby;
+    printf("\nColumn %d down",value);
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[sizey-1][value];
     int j;
     for(j=0;j<sizey;j++)
@@ -86,7 +93,9 @@ void rotation_column_down(char **laby,int value,int sizex,int sizey)
 //sizeX numero de colonnes
 void rotation_line_right(char **laby,int value,int sizex,int sizey)
 {
-    char **copy=laby;//copy of laby;
+     printf("\nLine %d right",value);
+    char **copy=alloc_2D_array(sizex,sizey);//copy of laby;
+    copy_2Dtab(copy,laby,sizex,sizey);
     char temp=laby[value][sizex-1];
     int j;
     for(j=0;j<sizex;j++)
@@ -101,44 +110,55 @@ int main()
     //fputs("This is testing for fputs...\n", f);
     //char* buff=malloc(sizeof(char)*2);
     //char* tab=malloc(sizeof(char)*17*17);
-    char** buff0=alloc_2D_array(2,2); //[4][4]//={{0,1,1,0},{0,1,1,0},{0,1,1,1},{1,1,0,0}};
+    char** buff0=alloc_2D_array(3,3); //[4][4]//={{0,1,1,0},{0,1,1,0},{0,1,1,1},{1,1,0,0}};
     buff0[0][0]=1;
     buff0[0][1]=0;
+    buff0[0][2]=0;
     buff0[1][0]=0;
     buff0[1][1]=1;
-    char **buff=alloc_2D_array(2,2);
-    buff=copy_2Dtab(buff,buff0,2,2);
+    buff0[1][2]=0;
+    buff0[2][0]=0;
+    buff0[2][1]=0;
+    buff0[2][2]=0;
+    char **buff=alloc_2D_array(3,3);
+    buff=copy_2Dtab(buff,buff0,3,3);
     /*int i,j;
     for (i=0;i<4;i++)
     {
         memcpy(buff[i],buff0[i],4);
     }*/
     //printf("%s",buff[4]);
-    print_laby(buff,2,2);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_column_down(buff,0,2,2);
-    print_laby(buff,2,2);
+    rotation_column_down(buff,0,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_column_down(buff,0,2,2);
-    print_laby(buff,2,2);
+    rotation_column_down(buff,0,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_column_down(buff,0,2,2);
-    print_laby(buff,2,2);
+    rotation_column_down(buff,0,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_column_down(buff,0,2,2);
-    print_laby(buff,2,2);
+    rotation_column_down(buff,0,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_line_right(buff,1,2,2);
-    print_laby(buff,2,2);
+    rotation_line_right(buff,1,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_line_right(buff,1,2,2);
-    print_laby(buff,2,2);
+    rotation_line_right(buff,1,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_line_right(buff,1,2,2);
-    print_laby(buff,2,2);
+    rotation_line_right(buff,1,3,3);
+    print_laby(buff,3,3);
     printf("\n");
-    rotation_line_right(buff,1,2,2);
-    print_laby(buff,2,2);
+    rotation_line_right(buff,1,3,3);
+    print_laby(buff,3,3);
+    printf("\n");
+    rotation_column_up(buff,2,3,3);
+    print_laby(buff,3,3);
+    printf("\n");
+    rotation_line_left(buff,0,3,3);
+    print_laby(buff,3,3);
     printf("\n");
     return 1;
 }
