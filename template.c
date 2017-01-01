@@ -291,7 +291,7 @@ int main()
 	//int rotate=0;
 
 	/* connection to the server */
-	connectToServer( "pc4001.polytech.upmc.fr", 1234, "Paola");
+	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
 	//connectToServer( "localhost", 1234, "prog_template");
 
 
