@@ -279,7 +279,7 @@ void print_laby(t_data data,int sizeX,int sizeY)
 
 int main()
 {
-	char labName[50];					/* name of the labyrinth */
+	char labName[]="Victory";					/* name of the labyrinth */
 	char* labData;						/* data of the labyrinth */
 	t_return_code ret = MOVE_OK;		/* indicates the status of the previous move */
 	t_move move;
@@ -287,16 +287,16 @@ int main()
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0;
-    debug=1;
+    debug=2;
 	//int rotate=0;
 
 	/* connection to the server */
-	connectToServer( "pc4022.polytech.upmc.fr", 1234, "Paola");
+	connectToServer( "pc4021.polytech.upmc.fr", 1234, "Paola");
 	//connectToServer( "localhost", 1234, "prog_template");
 
 
 	/* wait for a game, and retrieve informations about it */
-	waitForLabyrinth( "DO_NOTHING timeout=1000 tot=25", labName, &sizeX, &sizeY);
+	waitForLabyrinth( "PLAY_RANDOM rotation=False timeout=1000 tot=25", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
