@@ -296,7 +296,7 @@ int main()
 
 
 	/* wait for a game, and retrieve informations about it */
-	waitForLabyrinth( "PLAY_RANDOM rotation=False timeout=1000 tot=25", labName, &sizeX, &sizeY);
+    waitForLabyrinth( "ASTAR timeout=100", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
