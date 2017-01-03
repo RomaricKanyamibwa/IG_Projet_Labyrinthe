@@ -81,21 +81,6 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
     return data;
 }
 
-
-
-
-
-char ** update_lab( char**lab,char*labdata,int sizex,int sizey)
-{
-    int i,j;
-    for (i=0;i<sizey;i++)
-    {
-        for (j=0;j<sizex;j++)
-        lab[i][j]=labdata[i*sizex+j];
-    }
-    return lab;
-}
-
 char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
 {
     int i,j;
@@ -160,7 +145,9 @@ void rotation_line_right(char **laby,int value,int sizex,int sizey)
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
 
-    int alea=rand()%8;
+    int alea=rand()%9;
+    //printf("Enter a number from 0 to 8:");
+    //scanf("%d",&alea);
     int rotate=0;
     switch(alea)
     {
@@ -168,14 +155,16 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
         if(data->energy>=5)
             {
                 move->value=rand()%sizeY;
+                //printf("Enter a number from 0 to %d:",sizeY-1);
+                //scanf("%d",&move->value);
                 if(move->value==data->line)
-                    data->line=(sizeY+data->line-1)%sizeY;
+                    data->column=(sizeX+data->column-1)%sizeX;
                 data->energy-=5;
                 printf("Linerotate left\n");
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 printf("\n");
                 rotation_line_left(data->lab,move->value,sizeX,sizeY);
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -183,14 +172,16 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%sizeY;
+                //printf("Enter a number from 0 to %d:",sizeY-1);
+                //scanf("%d",&move->value);
                 if(move->value==data->line)
-                    data->line=(data->line+1)%sizeY;
+                    data->column=(data->column+1)%sizeX;
                 data->energy-=5;
                 printf("Linerotate right \n");
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 printf("\n");
                 rotation_line_right(data->lab,move->value,sizeX,sizeY);
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -198,14 +189,16 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%sizeX;
+                //printf("Enter a number from 0 to %d:",sizeX-1);
+                //scanf("%d",&move->value);
                 if(move->value==data->column)
-                    data->column=(sizeX+data->column-1)%sizeX;
+                    data->line=(sizeY+data->line-1)%sizeY;
                 data->energy-=5;
                 printf("Columnrotate up\n");
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 printf("\n");
                 rotation_column_up(data->lab,move->value,sizeX,sizeY);
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -213,14 +206,16 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
             if(data->energy>=5)
             {
                 move->value=rand()%sizeX;
+                //printf("Enter a number from 0 to %d:",sizeX-1);
+                //scanf("%d",&move->value);
                 if(move->value==data->column)
-                    data->column=(sizeX+data->column+1)%sizeX;
+                    data->line=(sizeY+data->line+1)%sizeY;
                 data->energy-=5;
                 printf("Columnrotate down\n");
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 printf("\n");
                 rotation_column_down(data->lab,move->value,sizeX,sizeY);
-                print_laby(*data,sizeX,sizeY);
+                //print_laby(*data,sizeX,sizeY);
                 rotate++;
                 *jouer=1;
             }break;
@@ -276,6 +271,50 @@ void print_laby(t_data data,int sizeX,int sizeY)
         }
 }
 
+void update_lab(t_move move,t_data* data,int sizeX,int sizeY)
+{
+    int alea=move.type;
+    //printf("Enter a number from 0 to 8:");
+    //scanf("%d",&alea);
+    switch(alea)
+    {
+    case 0://line rotation to the left
+
+            if(move.value==data->line)
+                data->column=(sizeX+data->column-1)%sizeX;
+            printf("Linerotate left\n");
+            printf("\n");
+            rotation_line_left(data->lab,move.value,sizeX,sizeY);
+            break;
+    case 1://line rotation to the right
+
+            if(move.value==data->line)
+                data->column=(data->column+1)%sizeX;
+            printf("Linerotate right \n");
+            printf("\n");
+            rotation_line_right(data->lab,move.value,sizeX,sizeY);
+            break;
+    case 2://column rotation up
+            if(move.value==data->column)
+                data->line=(sizeY+data->line-1)%sizeY;
+            printf("Columnrotate up\n");
+            printf("\n");
+            rotation_column_up(data->lab,move.value,sizeX,sizeY);
+            break;
+    case 3://column rotation down
+            if(move.value==data->column)
+                data->line=(sizeY+data->line+1)%sizeY;
+            printf("Columnrotate down\n");
+            printf("\n");
+            rotation_column_down(data->lab,move.value,sizeX,sizeY);
+            break;
+    default : printf(" ");
+    }
+
+    return;
+
+}
+
 
 int main()
 {
@@ -287,16 +326,16 @@ int main()
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0;
-    debug=2;
+    debug=1;
 	//int rotate=0;
 
 	/* connection to the server */
-	connectToServer( "pc4023.polytech.upmc.fr", 1234, "Paola");
+	connectToServer( "pc4001.polytech.upmc.fr", 1234, "Paola");
 	//connectToServer( "localhost", 1234, "prog_template");
 
 
 	/* wait for a game, and retrieve informations about it */
-    waitForLabyrinth( "ASTAR timeout=100", labName, &sizeX, &sizeY);
+    waitForLabyrinth( "PLAY_RANDOM timeout=100 rotation=True", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
@@ -310,6 +349,7 @@ int main()
         if (player==1)	/* The opponent plays */
           {
             ret = getMove( &move);
+            update_lab(move,&data,sizeX,sizeY);
             //playMove( &lab, move);
             }
         else

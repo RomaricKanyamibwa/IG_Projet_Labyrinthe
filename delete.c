@@ -1,4 +1,4 @@
-nodeT *ListDelete(nodeT *currP, elementT value)
+ptr_List ListDelete(ptr_List currP, t_case value)
 {
   /* See if we are at end of list. */
   if (currP == NULL)
@@ -8,11 +8,11 @@ nodeT *ListDelete(nodeT *currP, elementT value)
    * Check to see if current node is one
    * to be deleted.
    */
-  if (currP->element == value) {
-    nodeT *tempNextP;
+  if (currP->parent_case == value) {
+    ptr_List tempNextP;
 
     /* Save the next pointer in the node. */
-    tempNextP = currP->next;
+    tempNextP = currP->next_case;
 
     /* Deallocate the node. */
     free(currP);
@@ -31,7 +31,7 @@ nodeT *ListDelete(nodeT *currP, elementT value)
    * pointer in case the next node is the one
    * removed.
    */
-  currP->next = ListDelete(currP->next, value);
+  currP->next_case = ListDelete(currP->next_case, value);
 
 
   /*
