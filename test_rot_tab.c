@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 
 /*typedef struct t_data
@@ -30,11 +31,11 @@ void print_laby(char **lab,int sizeX,int sizeY)
 
 char** alloc_2D_array(int sizex,int sizey)
 {
-    char**lab=(char**)calloc(sizex,sizeof(char*));
+    char**lab=(char**)calloc(sizey,sizeof(char*));
     int i;
-    for (i=0;i<sizex;i++)
+    for (i=0;i<sizey;i++)
     {
-        lab[i]=calloc(sizey,sizeof(char));
+        lab[i]=calloc(sizex,sizeof(char));
     }
     return lab;
 }
@@ -46,6 +47,7 @@ char ** copy_2Dtab( char**dest,char**sourc,int sizex,int sizey)
     {
         for (j=0;j<sizex;j++)
         dest[i][j]=sourc[i][j];
+        //strcpy(dest[i],sourc[i]);
     }
     return dest;
 }
@@ -110,7 +112,7 @@ int main()
     //fputs("This is testing for fputs...\n", f);
     //char* buff=malloc(sizeof(char)*2);
     //char* tab=malloc(sizeof(char)*17*17);
-    char** buff0=alloc_2D_array(3,3); //[4][4]//={{0,1,1,0},{0,1,1,0},{0,1,1,1},{1,1,0,0}};
+    char** buff0=alloc_2D_array(3,4); //[4][4]//={{0,1,1,0},{0,1,1,0},{0,1,1,1},{1,1,0,0}};
     buff0[0][0]=1;
     buff0[0][1]=0;
     buff0[0][2]=0;
@@ -120,45 +122,48 @@ int main()
     buff0[2][0]=0;
     buff0[2][1]=0;
     buff0[2][2]=0;
-    char **buff=alloc_2D_array(3,3);
-    buff=copy_2Dtab(buff,buff0,3,3);
+    buff0[3][0]=1;
+    buff0[3][1]=0;
+    buff0[3][2]=0;
+    char **buff=alloc_2D_array(3,4);
+    buff=copy_2Dtab(buff,buff0,3,4);
     /*int i,j;
     for (i=0;i<4;i++)
     {
         memcpy(buff[i],buff0[i],4);
     }*/
     //printf("%s",buff[4]);
-    print_laby(buff,3,3);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_column_down(buff,0,3,3);
-    print_laby(buff,3,3);
+    rotation_column_down(buff,0,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_column_down(buff,0,3,3);
-    print_laby(buff,3,3);
+    rotation_column_down(buff,0,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_column_down(buff,0,3,3);
-    print_laby(buff,3,3);
+    rotation_column_down(buff,0,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_column_down(buff,0,3,3);
-    print_laby(buff,3,3);
+    rotation_column_down(buff,0,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_line_right(buff,1,3,3);
-    print_laby(buff,3,3);
+    rotation_line_right(buff,1,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_line_right(buff,1,3,3);
-    print_laby(buff,3,3);
+    rotation_line_right(buff,1,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_line_right(buff,1,3,3);
-    print_laby(buff,3,3);
+    rotation_line_right(buff,1,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_line_right(buff,1,3,3);
-    print_laby(buff,3,3);
+    rotation_line_right(buff,1,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_column_up(buff,2,3,3);
-    print_laby(buff,3,3);
+    rotation_column_up(buff,2,3,4);
+    print_laby(buff,3,4);
     printf("\n");
-    rotation_line_left(buff,0,3,3);
-    print_laby(buff,3,3);
+    rotation_line_left(buff,0,3,4);
+    print_laby(buff,3,4);
     printf("\n");
     return 1;
 }

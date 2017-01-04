@@ -34,30 +34,32 @@ typedef struct t_data
 extern int debug;	/* hack to enable debug messages */
 void print_laby(t_data data,int sizeX,int sizeY);
 
-
+//sizeY numero de lignes
+//sizeX numero de colonnes
 char ** init_lab(char*labdata,int sizex,int sizey)
 {
-    char**lab=(char**)calloc(sizex,sizeof(char*));
+    char**lab=(char**)calloc(sizey,sizeof(char*));
     int i,j;
-    for (i=0;i<sizex;i++)
+    for (i=0;i<sizey;i++)
     {
-        lab[i]=calloc(sizey,sizeof(char));
+        lab[i]=calloc(sizex,sizeof(char));
     }
-    for (i=0;i<sizex;i++)
+    for (i=0;i<sizey;i++)
     {
-        for (j=0;j<sizey;j++)
-        lab[i][j]=labdata[i*sizey+j];
+        for (j=0;j<sizex;j++)
+        lab[i][j]=labdata[i*sizex+j];
     }
     return lab;
 }
-
+//sizeY numero de lignes
+//sizeX numero de colonnes
 char** alloc_2D_array(int sizex,int sizey)
 {
-    char**lab=(char**)calloc(sizex,sizeof(char*));
+    char**lab=(char**)calloc(sizey,sizeof(char*));
     int i;
-    for (i=0;i<sizex;i++)
+    for (i=0;i<sizey;i++)
     {
-        lab[i]=calloc(sizey,sizeof(char));
+        lab[i]=calloc(sizex,sizeof(char));
     }
     return lab;
 }
@@ -69,7 +71,7 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
 {
 
     t_data data;
-    data.lab=init_lab(labdata,sizey,sizex);
+    data.lab=init_lab(labdata,sizex,sizey);
     data.line=sizey/2;
     data.energy=player;
     if(player)
