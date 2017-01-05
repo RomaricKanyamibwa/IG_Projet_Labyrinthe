@@ -7,7 +7,7 @@ typedef struct t_pos
     int column;
 }t_pos;//structure de  coordonee
 
-/*typedef enum
+typedef enum
 {
 	ROTATE_LINE_LEFT = 	0,
 	ROTATE_LINE_RIGHT = 1,
@@ -18,7 +18,7 @@ typedef struct t_pos
 	MOVE_LEFT = 6,
 	MOVE_RIGHT = 7,
 	DO_NOTHING = 8
-} t_typeMove;*/
+} t_typeMove;
 
 typedef struct t_case
 {
@@ -26,6 +26,7 @@ typedef struct t_case
     int cost;//cout pour se rendre du depart à cette case
     int heuristic;//estimation du cout total ( cost+ l'estimation de distance restante)
     t_pos pos_p;//noeud precedent
+    t_typeMove move;//commande à donner au server pour se deplacer de pos_p à pos
 
 }t_case;
 
@@ -43,7 +44,7 @@ typedef t_List* ptr_List;
 void set_start(t_pos start,t_pos Treasure);//position du debut
 void set_treasure(t_pos treas);//definition de la position du tresor
 int estim_distance(t_pos x_y,t_pos Treasure);//estimation de la distance entre la case x_y et le tresor
-t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure);//creation de la nouvelle case à ajouter dans la liste
+t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure,t_typeMove move);//creation de la nouvelle case à ajouter dans la liste
 ptr_List addElemList(ptr_List list,t_case c);//ajout d'une case à la liste
 ptr_List push(ptr_List list,t_case c);//ajout d'une case au debut de la liste
 int search(ptr_List list,t_case value);//recherche si value dans list

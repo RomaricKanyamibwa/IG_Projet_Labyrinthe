@@ -85,13 +85,13 @@ ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int s
     t_pos n_up={(c.pos.line-1+sizeY)%sizeY,c.pos.column};//voisin haut
     t_pos n_right={c.pos.line,(c.pos.column+1)%sizeX};//voisin droite
     t_pos n_left={c.pos.line,(c.pos.column-1+sizeX)%sizeX};//voisin gauche
-    t_case n=nouvelle_case(c,n_down,Treasure);
+    t_case n=nouvelle_case(c,n_down,Treasure,5);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_right,Treasure);
+    n=nouvelle_case(c,n_right,Treasure,7);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_left,Treasure);
+    n=nouvelle_case(c,n_left,Treasure,6);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_up,Treasure);
+    n=nouvelle_case(c,n_up,Treasure,4);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
 
     return list;
@@ -139,19 +139,21 @@ void set_start(t_pos start,t_pos Treasure)
     Start.heuristic=estim_distance(start,Treasure);
     Start.pos_p.line=-1;
     Start.pos_p.column=-1;
+    Start.move=8;
 }
 void set_treasure(t_pos treas)
 {
     Treasure=treas;
 }
 
-t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure)
+t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure,t_typeMove move)
 {
     t_case v;
     v.pos=pos;
     v.cost=c.cost+1;
     v.heuristic=v.cost+estim_distance(pos,Treasure);
     v.pos_p=c.pos;
+    v.move=move;
     return v;
 }
 
@@ -310,7 +312,7 @@ void print_list(ptr_List list)
     tmp=list;
     while(tmp!=NULL)
     {
-        printf("%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d\n",i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic);
+        printf("%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d,move:%d\n",i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic,tmp->parent_case.move);
         tmp=tmp->next_case;
         //i++;
     }
