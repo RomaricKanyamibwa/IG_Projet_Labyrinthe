@@ -208,7 +208,7 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
 
     /* Save the next pointer in the node. */
     tempNextP = currP->next_case;
-    if(tempNextP!=NULL) tempNextP->size_list=get_sizeList(tempNextP);
+    //if(tempNextP!=NULL) tempNextP->size_list=get_sizeList(tempNextP);
     /* Deallocate the node. */
     free(currP);
 
