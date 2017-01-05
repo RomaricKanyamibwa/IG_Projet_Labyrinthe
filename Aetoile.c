@@ -13,41 +13,49 @@ int main()
     t_pos rnd={3,5};
     int d=estim_distance(rnd);
     printf("Dist :%d\n",d);*/
+    int cnt=0;
     t_pos start={0,0};
     t_pos Treasure={10,11};
     set_start(start);
     set_treasure(Treasure);
     ptr_List closedList=NULL;
     ptr_List openList=malloc(sizeof(t_List));
-    ptr_List path;
+    //ptr_List path;
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
     t_case c=openList->parent_case;
 
-    while(openList)
+    while(openList!=NULL)
     {
+        cnt++;
         c=min_case(openList);
         //printf("Heuristique openList:%d\n",openList->parent_case.heuristic);
         openList=deleteElemList(openList,c);
-        //if(openList==NULL) printf("Open NULL\n");
+        if(openList==NULL) printf("Open NULL\n");
         closedList=addElemList(closedList,c);
         //if(closedList!=NULL)printf("Closed not Null %d",closedList->parent_case.cost+3);
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
-            path=create_path(closedList);
+            //path=create_path(closedList);
         }else
         {
-            openList=add_neighbor(openList,closedList,c,100,100);
+            openList=add_neighbor(openList,closedList,c,15,15);
             printf("size open: %d\n",openList->size_list);
             printf("vois1: %d\n",openList->parent_case.pos.line);
-            //break;
+            if(cnt>=1)break;
         }
 
 
     }
-
-
+    //set_sizeList(openList);
+    print_list(openList);
+    openList=deleteElemList(openList,openList->next_case->parent_case);
+    openList->size_list=get_sizeList(openList);
+    printf("\n");
+    print_list(openList);
+    free(openList);
+    free(closedList);
     return 1;
 }
 
@@ -173,10 +181,12 @@ ptr_List addElemList(ptr_List list,t_case c)
         ptr_List current = list;
         while (current->next_case != NULL)
         {
-            current->size_list++;
+            current->size_list++;//=get_sizeList(current);
+            printf("size:%d\n",current->size_list);
             current = current->next_case;
         }
         current->next_case = newList;
+        current->size_list++;//=newList->size_list+1;
         printf("added later\n");
     }
     return list;
@@ -198,7 +208,7 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
 
     /* Save the next pointer in the node. */
     tempNextP = currP->next_case;
-
+    if(tempNextP!=NULL) tempNextP->size_list=get_sizeList(tempNextP);
     /* Deallocate the node. */
     free(currP);
 
@@ -208,6 +218,7 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
      * the previous call will use to "skip
      * over" the removed node.
      */
+     printf("delete\n");
     return tempNextP;
   }
 
@@ -217,6 +228,7 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
    * removed.
    */
   currP->next_case = deleteElemList(currP->next_case, value);
+  if(currP!=NULL) currP->size_list=get_sizeList(currP);
 
 
   /*
@@ -243,4 +255,46 @@ int comp_2case(t_case c1,t_case c2)
     if ( c1.heuristic<c2.heuristic  )
         return 1;
     return -1;
+}
+
+int get_sizeList(ptr_List list)
+{
+    int size=0;
+    if(list==NULL) return 0;
+    ptr_List tmp=malloc(sizeof(list));
+    tmp=list;
+    while(tmp!=NULL)
+    {
+        size++;
+        tmp=tmp->next_case;
+    }
+    tmp=NULL;
+    free(tmp);
+    return size;
+}
+
+/**ptr_List set_sizeList(ptr_List list)
+{
+    ptr_List tmp=malloc(sizeof(list));
+    tmp=list;
+    while(tmp!=NULL)
+    {
+        tmp->size_list=get_sizeList(tmp);
+    }
+    return list;
+}**/
+
+void print_list(ptr_List list)
+{
+    ptr_List tmp=malloc(sizeof(list));
+    int i=1;
+    tmp=list;
+    while(tmp!=NULL)
+    {
+        printf("%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d\n",i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic);
+        tmp=tmp->next_case;
+        //i++;
+    }
+    tmp=NULL;
+    free(tmp);
 }
