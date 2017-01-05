@@ -15,9 +15,9 @@ int main()
     printf("Dist :%d\n",d);*/
     int cnt=0;
     t_pos start={0,0};
-    t_pos Treasure={10,11};
-    set_start(start);
-    set_treasure(Treasure);
+    t_pos treasure={5,5};
+    set_start(start,treasure);
+    set_treasure(treasure);
     ptr_List closedList=NULL;
     ptr_List openList=malloc(sizeof(t_List));
     //ptr_List path;
@@ -28,51 +28,70 @@ int main()
 
     while(openList!=NULL)
     {
+        //printf("openListcreate:\n");
+        //print_list(openList);
         cnt++;
         c=min_case(openList);
         //printf("Heuristique openList:%d\n",openList->parent_case.heuristic);
         openList=deleteElemList(openList,c);
-        if(openList==NULL) printf("Open NULL\n");
+        //if(openList==NULL) printf("Open NULL\n");
         closedList=addElemList(closedList,c);
         //if(closedList!=NULL)printf("Closed not Null %d",closedList->parent_case.cost+3);
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
             //path=create_path(closedList);
+            printf("YEAH PATH");
+            break;
         }else
         {
-            openList=add_neighbor(openList,closedList,c,15,15);
-            printf("size open: %d\n",openList->size_list);
-            printf("vois1: %d\n",openList->parent_case.pos.line);
-            if(cnt>=1)break;
+            //sizeY numero de lignes
+            //sizeX numero de colonnes
+            openList=add_neighbor(openList,closedList,c,Treasure,11,10);
+            //printf("size open: %d\n",openList->size_list);
+            //printf("vois1: %d\n",openList->parent_case.pos.line);
+            if(cnt>50)break;
         }
 
 
     }
     //set_sizeList(openList);
+    printf("\nOpenList\n");
     print_list(openList);
-    openList=deleteElemList(openList,openList->next_case->parent_case);
-    openList->size_list=get_sizeList(openList);
+    //openList=deleteElemList(openList,openList->next_case->parent_case);
+    //openList->size_list=get_sizeList(openList);
     printf("\n");
-    print_list(openList);
+    //print_list(openList);
+    printf("\nClosedList\n");
+    print_list(closedList);
     free(openList);
     free(closedList);
     return 1;
 }
-
-
-ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,int sizeX,int sizeY)
+/**
+    ROTATE_LINE_LEFT = 	0,
+	ROTATE_LINE_RIGHT = 1,
+	ROTATE_COLUMN_UP = 2,
+	ROTATE_COLUMN_DOWN = 3,
+	MOVE_UP = 4,
+	MOVE_DOWN = 5,
+	MOVE_LEFT = 6,
+	MOVE_RIGHT = 7,
+	DO_NOTHING = 8**/
+//sizeY numero de lignes
+//sizeX numero de colonnes
+ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY)
 {
-    t_pos n_down={(c.pos.line+1)%sizeY,c.pos.column};
-    t_pos n_up={(c.pos.line-1+sizeY)%sizeY,c.pos.column};
-    t_pos n_right={c.pos.line,(c.pos.column+1)%sizeX};
-    t_pos n_left={c.pos.line,(c.pos.column-1+sizeX)%sizeX};
-    t_case n=nouvelle_case(c,n_down);
+    t_pos n_down={(c.pos.line+1)%sizeY,c.pos.column};//voisin bas
+    t_pos n_up={(c.pos.line-1+sizeY)%sizeY,c.pos.column};//voisin haut
+    t_pos n_right={c.pos.line,(c.pos.column+1)%sizeX};//voisin droite
+    t_pos n_left={c.pos.line,(c.pos.column-1+sizeX)%sizeX};//voisin gauche
+    t_case n=nouvelle_case(c,n_down,Treasure);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_right);
+    n=nouvelle_case(c,n_right,Treasure);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_left);
+    n=nouvelle_case(c,n_left,Treasure);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
-    n=nouvelle_case(c,n_up);
+    n=nouvelle_case(c,n_up,Treasure);
     if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
 
     return list;
@@ -113,11 +132,11 @@ t_case min_case(ptr_List list)
     return min;
 }
 
-void set_start(t_pos start)
+void set_start(t_pos start,t_pos Treasure)
 {
     Start.pos=start;
     Start.cost=0;
-    Start.heuristic=estim_distance(start);
+    Start.heuristic=estim_distance(start,Treasure);
     Start.pos_p.line=-1;
     Start.pos_p.column=-1;
 }
@@ -126,24 +145,24 @@ void set_treasure(t_pos treas)
     Treasure=treas;
 }
 
-t_case nouvelle_case(t_case c,t_pos pos)
+t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure)
 {
     t_case v;
     v.pos=pos;
     v.cost=c.cost+1;
-    v.heuristic=v.cost+estim_distance(pos);
+    v.heuristic=v.cost+estim_distance(pos,Treasure);
     v.pos_p=c.pos;
     return v;
 }
 
-int estim_distance(t_pos x_y)
+int estim_distance(t_pos x_y,t_pos Treasure)// estimation de la distance entre (x,y) et le tresor
 {
     int d=0,dx,dy;
     dx=x_y.line-Treasure.line;
     if(dx<0) dx*=-1;
     dy=x_y.column-Treasure.column;
     if(dy<0) dy*=-1;
-    d=dx+dy;
+    d=dx+dy;//distance de manhattan
     return d;
 }
 
@@ -172,7 +191,7 @@ ptr_List addElemList(ptr_List list,t_case c)
     {
         list->size_list++;
         list->next_case = newList;
-        printf("added at beginning\n");
+        //printf("added at beginning\n");
     }
     else
     {
@@ -182,12 +201,12 @@ ptr_List addElemList(ptr_List list,t_case c)
         while (current->next_case != NULL)
         {
             current->size_list++;//=get_sizeList(current);
-            printf("size:%d\n",current->size_list);
+            //printf("size:%d\n",current->size_list);
             current = current->next_case;
         }
         current->next_case = newList;
         current->size_list++;//=newList->size_list+1;
-        printf("added later\n");
+        //printf("added later\n");
     }
     return list;
 }
@@ -218,7 +237,7 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
      * the previous call will use to "skip
      * over" the removed node.
      */
-     printf("delete\n");
+    //printf("delete\n");
     return tempNextP;
   }
 

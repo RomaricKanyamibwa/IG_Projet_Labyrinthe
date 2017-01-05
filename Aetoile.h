@@ -7,6 +7,19 @@ typedef struct t_pos
     int column;
 }t_pos;//structure de  coordonee
 
+/*typedef enum
+{
+	ROTATE_LINE_LEFT = 	0,
+	ROTATE_LINE_RIGHT = 1,
+	ROTATE_COLUMN_UP = 2,
+	ROTATE_COLUMN_DOWN = 3,
+	MOVE_UP = 4,
+	MOVE_DOWN = 5,
+	MOVE_LEFT = 6,
+	MOVE_RIGHT = 7,
+	DO_NOTHING = 8
+} t_typeMove;*/
+
 typedef struct t_case
 {
     t_pos pos;//les coordonees de la case
@@ -20,16 +33,17 @@ typedef struct t_List
 {
     int size_list;//taille de la liste
     t_case parent_case;//case courante
+    //t_typeMove move:8;//commande à donner au server pour se deplacer à la case parent_case
     struct t_List* next_case;//case suivante
 
 }t_List;
 
 typedef t_List* ptr_List;
 
-void set_start(t_pos start);//position du debut
+void set_start(t_pos start,t_pos Treasure);//position du debut
 void set_treasure(t_pos treas);//definition de la position du tresor
-int estim_distance(t_pos x_y);//estimation de la distance entre la case x_y et le tresor
-t_case nouvelle_case(t_case c,t_pos pos);//creation de la nouvelle case à ajouter dans la liste
+int estim_distance(t_pos x_y,t_pos Treasure);//estimation de la distance entre la case x_y et le tresor
+t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure);//creation de la nouvelle case à ajouter dans la liste
 ptr_List addElemList(ptr_List list,t_case c);//ajout d'une case à la liste
 ptr_List push(ptr_List list,t_case c);//ajout d'une case au debut de la liste
 int search(ptr_List list,t_case value);//recherche si value dans list
@@ -41,7 +55,7 @@ int comp_case(t_case c1,t_case c2);//comparaison de deux cases,on renvoi 1 si c1
 t_case min_case(ptr_List list);//min case de la list
 int comp_2case(t_case c1,t_case c2);//
 ptr_List create_path(ptr_List list);//reconstituer le chemin
-ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,int sizeX,int sizeY);//les voisins de c
+ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY);//les voisins de c
 void print_list(ptr_List list);//fonction d'affichage d'une list
 int get_sizeList(ptr_List list);//taille d'une list
 //ptr_List set_sizeList(ptr_List list);//definit la taille de la liste
