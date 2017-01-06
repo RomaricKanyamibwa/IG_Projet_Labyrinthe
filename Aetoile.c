@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Aetoile.h"
-
+#include <time.h>
 
 t_case Start;
 t_pos Treasure;
@@ -24,11 +24,11 @@ char** create_table(int line,int column)
     time_t t;
     /* Intializes random number generator */
     srand((unsigned) time(&t));
-    for(k=0;k<5;k++)
+    for(k=0;k<200;k++)
     {
         i=rand()%line;
         j=rand()%column;
-        tab[i][j]=1;
+        if(i!=7&&j!=10)tab[i][j]=1;
     }
 
     return tab;
@@ -54,17 +54,17 @@ int main()
     t_pos rnd={3,5};
     int d=estim_distance(rnd);
     printf("Dist :%d\n",d);*/
-    int cnt=0;
+    //int cnt=0;
     t_pos start={0,0};
-    t_pos treasure={7,8};
-    int column=20;
-    int line=15;
+    t_pos treasure={7,10};
+    int column=15;
+    int line=20;
     char** tab=create_table(line,column);
     set_start(start,treasure);
     set_treasure(treasure);
     ptr_List closedList=NULL;
     ptr_List openList=malloc(sizeof(t_List));
-    //ptr_List path;
+    ptr_List path;
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
@@ -74,7 +74,7 @@ int main()
     {
         //printf("openListcreate:\n");
         //print_list(openList);
-        cnt++;
+        //cnt++;
         c=min_case(openList);
         //printf("Heuristique openList:%d\n",openList->parent_case.heuristic);
         openList=deleteElemList(openList,c);
@@ -83,6 +83,7 @@ int main()
         //if(closedList!=NULL)printf("Closed not Null %d",closedList->parent_case.cost+3);
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
+            printf("YEAH PATH");
             //path=create_path(closedList);
             printf("YEAH PATH");
             break;
@@ -90,10 +91,10 @@ int main()
         {
             //sizeY numero de lignes
             //sizeX numero de colonnes
-            openList=add_neighbor(openList,closedList,c,Treasure,column,line);
+            openList=add_neighbor(openList,closedList,c,Treasure,column,line,tab);
             //printf("size open: %d\n",openList->size_list);
             //printf("vois1: %d\n",openList->parent_case.pos.line);
-            if(cnt>50)break;
+            //if(cnt>50)break;
         }
 
     }
@@ -102,13 +103,16 @@ int main()
     printf("\n");
     //set_sizeList(openList);
     printf("\nOpenList\n");
-    print_list(openList);
+    print_list(openList,tab);
     //openList=deleteElemList(openList,openList->next_case->parent_case);
     //openList->size_list=get_sizeList(openList);
     printf("\n");
-    //print_list(openList);
     printf("\nClosedList\n");
-    print_list(closedList);
+    print_list(closedList,tab);
+    printf("\n");
+    printf("\nPath\n");
+    print_list(path,tab);
+    free(path);
     free(openList);
     free(closedList);
     return 1;
@@ -125,20 +129,20 @@ int main()
 	DO_NOTHING = 8**/
 //sizeY numero de lignes
 //sizeX numero de colonnes
-ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY)
+ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY,char** lab)
 {
     t_pos n_down={(c.pos.line+1)%sizeY,c.pos.column};//voisin bas
     t_pos n_up={(c.pos.line-1+sizeY)%sizeY,c.pos.column};//voisin haut
     t_pos n_right={c.pos.line,(c.pos.column+1)%sizeX};//voisin droite
     t_pos n_left={c.pos.line,(c.pos.column-1+sizeX)%sizeX};//voisin gauche
     t_case n=nouvelle_case(c,n_down,Treasure,5);
-    if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
+    if(!search(list,n)&&!search(list2,n)&&!lab[(c.pos.line+1)%sizeY][c.pos.column])list=addElemList(list,n);
     n=nouvelle_case(c,n_right,Treasure,7);
-    if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
+    if(!search(list,n)&&!search(list2,n)&&!lab[c.pos.line][(c.pos.column+1)%sizeX])list=addElemList(list,n);
     n=nouvelle_case(c,n_left,Treasure,6);
-    if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
+    if(!search(list,n)&&!search(list2,n)&&!lab[c.pos.line][(c.pos.column-1+sizeX)%sizeX])list=addElemList(list,n);
     n=nouvelle_case(c,n_up,Treasure,4);
-    if(!search(list,n)&&!search(list2,n))list=addElemList(list,n);
+    if(!search(list,n)&&!search(list2,n)&&!lab[(c.pos.line-1+sizeY)%sizeY][c.pos.column])list=addElemList(list,n);
 
     return list;
 }
@@ -158,9 +162,16 @@ int search(ptr_List list,t_case value)
 
 ptr_List create_path(ptr_List list)
 {
-    ptr_List tmp=malloc(sizeof(t_List));
-
-
+    if(list==NULL) return NULL;
+    ptr_List tmp=list;
+    ptr_List next=list->next_case;
+    //ptr_List before=list;
+    while(next!=NULL)
+    {
+        tmp=next;
+        next=next->next_case;
+    }
+    if(list!=NULL)tmp->next_case=create_path(list->next_case);
     return tmp;
 
 }
@@ -351,14 +362,14 @@ int get_sizeList(ptr_List list)
     return list;
 }**/
 
-void print_list(ptr_List list)
+void print_list(ptr_List list,char** lab)
 {
     ptr_List tmp=malloc(sizeof(list));
     int i=1;
     tmp=list;
     while(tmp!=NULL)
     {
-        printf("%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d,move:%d\n",i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic,tmp->parent_case.move);
+        printf("CASE:%d ,%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d,move:%d\n",lab[tmp->parent_case.pos.line][tmp->parent_case.pos.column],i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic,tmp->parent_case.move);
         tmp=tmp->next_case;
         //i++;
     }

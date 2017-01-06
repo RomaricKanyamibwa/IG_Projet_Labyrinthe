@@ -54,10 +54,10 @@ ptr_List copyList(ptr_List list);//on fait une copie de la liste list
 t_case copyCase(t_case c);//copy de la case "c"
 int comp_case(t_case c1,t_case c2);//comparaison de deux cases,on renvoi 1 si c1=c2 0 sinon
 t_case min_case(ptr_List list);//min case de la list
-int comp_2case(t_case c1,t_case c2);//
+int comp_2case(t_case c1,t_case c2);//2eme fonction de comparaison des cases
 ptr_List create_path(ptr_List list);//reconstituer le chemin
-ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY);//les voisins de c
-void print_list(ptr_List list);//fonction d'affichage d'une list
+ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY,char** lab);//les voisins de c
+void print_list(ptr_List list,char** lab);//fonction d'affichage d'une list
 int get_sizeList(ptr_List list);//taille d'une list
 //ptr_List set_sizeList(ptr_List list);//definit la taille de la liste
 #endif // AETOILE_H_INCLUDED
