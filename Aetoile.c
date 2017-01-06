@@ -6,6 +6,47 @@
 t_case Start;
 t_pos Treasure;
 
+char** alloc_2D_array(int sizex,int sizey)
+{
+    char**lab=(char**)calloc(sizey,sizeof(char*));
+    int i;
+    for (i=0;i<sizey;i++)
+    {
+        lab[i]=calloc(sizex,sizeof(char));
+    }
+    return lab;
+}
+
+char** create_table(int line,int column)
+{
+    char** tab=alloc_2D_array(column,line);
+    int i,j,k;
+    time_t t;
+    /* Intializes random number generator */
+    srand((unsigned) time(&t));
+    for(k=0;k<5;k++)
+    {
+        i=rand()%line;
+        j=rand()%column;
+        tab[i][j]=1;
+    }
+
+    return tab;
+}
+
+void print_laby(char** tab,int sizeX,int sizeY)
+{
+    int i,j;
+    for(i=0;i<sizeY;i++)
+        {
+            printf("\n");
+            for(j=0;j<sizeX;j++)
+            {
+                printf("%d ",tab[i][j]);
+            }
+        }
+}
+
 int main()
 {
     /*Treasure.line=3;
@@ -15,7 +56,10 @@ int main()
     printf("Dist :%d\n",d);*/
     int cnt=0;
     t_pos start={0,0};
-    t_pos treasure={5,5};
+    t_pos treasure={7,8};
+    int column=20;
+    int line=15;
+    char** tab=create_table(line,column);
     set_start(start,treasure);
     set_treasure(treasure);
     ptr_List closedList=NULL;
@@ -46,14 +90,16 @@ int main()
         {
             //sizeY numero de lignes
             //sizeX numero de colonnes
-            openList=add_neighbor(openList,closedList,c,Treasure,11,10);
+            openList=add_neighbor(openList,closedList,c,Treasure,column,line);
             //printf("size open: %d\n",openList->size_list);
             //printf("vois1: %d\n",openList->parent_case.pos.line);
             if(cnt>50)break;
         }
 
-
     }
+    printf("\n");
+    print_laby(tab,column,line);
+    printf("\n");
     //set_sizeList(openList);
     printf("\nOpenList\n");
     print_list(openList);
