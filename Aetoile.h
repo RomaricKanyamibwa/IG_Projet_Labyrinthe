@@ -7,18 +7,6 @@ typedef struct t_pos
     int column;
 }t_pos;//structure de  coordonee
 
-typedef enum
-{
-	ROTATE_LINE_LEFT = 	0,
-	ROTATE_LINE_RIGHT = 1,
-	ROTATE_COLUMN_UP = 2,
-	ROTATE_COLUMN_DOWN = 3,
-	MOVE_UP = 4,
-	MOVE_DOWN = 5,
-	MOVE_LEFT = 6,
-	MOVE_RIGHT = 7,
-	DO_NOTHING = 8
-} t_typeMove;
 
 typedef struct t_case
 {
@@ -26,7 +14,6 @@ typedef struct t_case
     int cost;//cout pour se rendre du depart à cette case
     int heuristic;//estimation du cout total ( cost+ l'estimation de distance restante)
     t_pos pos_p;//noeud precedent
-    t_typeMove move;//commande à donner au server pour se deplacer de pos_p à pos
 
 }t_case;
 
@@ -44,7 +31,7 @@ typedef t_List* ptr_List;
 void set_start(t_pos start,t_pos Treasure);//position du debut
 void set_treasure(t_pos treas);//definition de la position du tresor
 int estim_distance(t_pos x_y,t_pos Treasure);//estimation de la distance entre la case x_y et le tresor
-t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure,t_typeMove move);//creation de la nouvelle case à ajouter dans la liste
+t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure);//creation de la nouvelle case à ajouter dans la liste
 ptr_List addElemList(ptr_List list,t_case c);//ajout d'une case à la liste
 ptr_List push(ptr_List list,t_case c);//ajout d'une case au debut de la liste
 int search(ptr_List list,t_case value);//recherche si value dans list
@@ -55,9 +42,10 @@ t_case copyCase(t_case c);//copy de la case "c"
 int comp_case(t_case c1,t_case c2);//comparaison de deux cases,on renvoi 1 si c1=c2 0 sinon
 t_case min_case(ptr_List list);//min case de la list
 int comp_2case(t_case c1,t_case c2);//2eme fonction de comparaison des cases
-ptr_List create_path(ptr_List list);//reconstituer le chemin
+t_pos* create_path(ptr_List list,int* size_path);//reconstituer le chemin ,size_path est l taille du chemin
 ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY,char** lab);//les voisins de c
 void print_list(ptr_List list,char** lab);//fonction d'affichage d'une list
 int get_sizeList(ptr_List list);//taille d'une list
+int search_path(t_pos* path,t_pos x_y,int size);//recherche si x_y est dans le path (renvoie 1 si x_y dans le path 0 sinon)
 //ptr_List set_sizeList(ptr_List list);//definit la taille de la liste
 #endif // AETOILE_H_INCLUDED
