@@ -37,13 +37,13 @@ t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
                 listMoves[i-1]=get_move(path[i-2],path[j-1],line,column);
                 if(listMoves[i-1]!=-1) j=i-1;
                 else j=j;
-                /*if(i!=size_path)
+                if(i!=size_path)
                 {
-                    if(listMoves[i]==MOVE_DOWN&&listMoves[i-1]==MOVE_UP) listMoves[i-1]=-1;
-                    if(listMoves[i]==MOVE_UP&&listMoves[i-1]==MOVE_DOWN) listMoves[i-1]=-1;
-                    if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) listMoves[i-1]=-1;
-                    if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) listMoves[i-1]=-1;
-                }*/
+                    if(listMoves[i]==MOVE_DOWN&&listMoves[i-1]==MOVE_UP) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_UP&&listMoves[i-1]==MOVE_DOWN) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                }
                 if(path[i-2].column==0 &&path[i-2].line==0) end=1;
             //}else
                 //listMoves[i-1]=-1;
