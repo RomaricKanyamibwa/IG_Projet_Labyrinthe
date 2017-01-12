@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include "labyrinthAPI.h"
 #include <unistd.h>
+#include "Aetoile.h"
+#include <time.h>
+
 //#include "template.h"
 
 //sizeY numero de lignes
@@ -33,6 +36,65 @@ typedef struct t_data
 
 extern int debug;	/* hack to enable debug messages */
 void print_laby(t_data data,int sizeX,int sizeY);
+t_case Start;
+t_pos Treasure;
+t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+
+
+t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
+{
+        t_typeMove* listMoves=(t_typeMove*)calloc(size_path,sizeof(t_typeMove));
+        if(listMoves == NULL)
+        {
+            fprintf(stderr, "Unable to allocate memory for new listmove\n");
+            exit(-1);
+        }
+        int i=0,j=size_path;//,end=0;
+        for(i=size_path;i>0;i--)
+        {
+            //printf("\ni:%d j:%d ",i,j);
+            //if(!end)
+            //{
+                listMoves[i-1]=get_move(path[i-2],path[j-1],line,column);
+                if(listMoves[i-1]!=-1) j=i-1;
+                else j=j;
+                if(i!=size_path)
+                {
+                    if(listMoves[i]==MOVE_DOWN&&listMoves[i-1]==MOVE_UP) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_UP&&listMoves[i-1]==MOVE_DOWN) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                    if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                }
+                //if(path[i-2].column==0 &&path[i-2].line==0) end=1;
+            //}else
+                //listMoves[i-1]=-1;
+            }
+        listMoves[0]=-1;
+        /*for(i=0;i<size_path;i++)
+        {
+            if(listMoves[i]==MOVE_DOWN)printf("Down\n");
+            else if(listMoves[i]==MOVE_LEFT)printf("Left\n");
+                else if(listMoves[i]==MOVE_RIGHT)printf("Right\n");
+                    else if(listMoves[i]==MOVE_UP)printf("UP\n");
+                        //else printf("Ignore\n");
+        }
+        printf("\n");*/
+        return listMoves;
+}
+
+t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
+{
+    //printf("dx:%d et dy:%d\n",Start.column-End.column,Start.line-End.line);
+    if(Start.column-End.column==1&&Start.line-End.line==0) return MOVE_LEFT;
+    if(Start.column-End.column==-1&&Start.line-End.line==0) return MOVE_RIGHT;
+    if(Start.line-End.line==1&&Start.column-End.column==0) return MOVE_UP;
+    if(Start.line-End.line==-1&&Start.column-End.column==0) return MOVE_DOWN;
+    if(Start.column-End.column==-(column-1)&&Start.line-End.line==0) return MOVE_LEFT;
+    if(Start.column-End.column==(column-1)&&Start.line-End.line==0) return MOVE_RIGHT;
+    if(Start.line-End.line==-(line-1)&&Start.column-End.column==0) return MOVE_UP;
+    if(Start.line-End.line==(line-1)&&Start.column-End.column==0) return MOVE_DOWN;
+    return -1;
+}
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
