@@ -103,14 +103,14 @@ char** create_table(int line,int column)
     time_t t;
     /* Intializes random number generator */
     srand((unsigned) time(&t));
-    for(k=0;k<200;k++)
+    for(k=0;k<100;k++)
     {
         i=rand()%line;
         j=rand()%column;
         if(i!=7&&j!=10)tab[i][j]=1;
     }
     tab[10][7]=0;
-    tab[0][0]=0;
+    tab[10][0]=0;
 
     return tab;
 }
@@ -138,7 +138,7 @@ void change_tab(char** tab,t_pos* tab_cases,int size)
         {
            printf("Debug size:%d ,i:%d line:%d column:%d\n",size,i,tab_cases[i].line,tab_cases[i].column);
             if(tab_cases==NULL)printf("NULL");
-                tab[tab_cases[i].line][tab_cases[i].column]=8;
+                if(tab[tab_cases[i].line][tab_cases[i].column]!=1)tab[tab_cases[i].line][tab_cases[i].column]=8;
         }
 
 }
@@ -152,7 +152,7 @@ int main()
     printf("Dist :%d\n",d);*/
     //int cnt=0;
     int size_path=0;
-    t_pos start={0,0};
+    t_pos start={10,0};
     t_pos treasure={10,7};
     int column=15;
     int line=20;
@@ -457,8 +457,8 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
 
 int comp_case(t_case c1,t_case c2)
 {
-    if (c1.cost==c2.cost && c1.pos.line==c2.pos.line && c1.pos.column==c2.pos.column
-    && c1.pos_p.line==c2.pos_p.line && c1.pos_p.column==c2.pos_p.column )
+    if (/*c1.cost==c2.cost &&*/ c1.pos.line==c2.pos.line && c1.pos.column==c2.pos.column
+    )//&& c1.pos_p.line==c2.pos_p.line && c1.pos_p.column==c2.pos_p.column )
         return 1;
     return 0;
 }
