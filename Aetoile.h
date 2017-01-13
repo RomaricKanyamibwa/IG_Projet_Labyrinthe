@@ -1,6 +1,8 @@
 #ifndef AETOILE_H_INCLUDED
 #define AETOILE_H_INCLUDED
 
+#include "labyrinthAPI.h"
+
 typedef struct t_pos
 {
     int line;
@@ -28,6 +30,9 @@ typedef struct t_List
 
 typedef t_List* ptr_List;
 
+t_typeMove* listmoves(t_pos* path,int size_path,int line,int column);
+t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** tab,int* found_path);//Cette fonction construit la closedList
 void set_start(t_pos start,t_pos Treasure);//position du debut
 void set_treasure(t_pos treas);//definition de la position du tresor
 int estim_distance(t_pos x_y,t_pos Treasure);//estimation de la distance entre la case x_y et le tresor

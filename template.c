@@ -15,14 +15,14 @@
 #include <unistd.h>
 #include "Aetoile.h"
 #include <time.h>
-
-//#include "template.h"
+#include "template.h"
+#include "array_mod.h"
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
 
 
-typedef struct t_data
+/*typedef struct t_data
 {
     char** lab;
     char* map;
@@ -31,17 +31,16 @@ typedef struct t_data
     int energy;
     int line_treas;
     int column_treas;
-}t_data;
+}t_data;*/
 
 
 extern int debug;	/* hack to enable debug messages */
-void print_laby(t_data data,int sizeX,int sizeY);
 t_case Start;
 t_pos Treasure;
-t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+//t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
 
 
-t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
+/*t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
 {
         t_typeMove* listMoves=(t_typeMove*)calloc(size_path,sizeof(t_typeMove));
         if(listMoves == NULL)
@@ -70,7 +69,7 @@ t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
                 //listMoves[i-1]=-1;
             }
         listMoves[0]=-1;
-        /*for(i=0;i<size_path;i++)
+        for(i=0;i<size_path;i++)
         {
             if(listMoves[i]==MOVE_DOWN)printf("Down\n");
             else if(listMoves[i]==MOVE_LEFT)printf("Left\n");
@@ -78,11 +77,11 @@ t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
                     else if(listMoves[i]==MOVE_UP)printf("UP\n");
                         //else printf("Ignore\n");
         }
-        printf("\n");*/
+        printf("\n");
         return listMoves;
-}
+}*/
 
-t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
+/*t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
 {
     //printf("dx:%d et dy:%d\n",Start.column-End.column,Start.line-End.line);
     if(Start.column-End.column==1&&Start.line-End.line==0) return MOVE_LEFT;
@@ -95,10 +94,10 @@ t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
     if(Start.line-End.line==(line-1)&&Start.column-End.column==0) return MOVE_DOWN;
     return -1;
 }
-
+*/
 //sizeY numero de lignes
 //sizeX numero de colonnes
-char ** init_lab(char*labdata,int sizex,int sizey)
+/*char ** init_lab(char*labdata,int sizex,int sizey)
 {
     char**lab=(char**)calloc(sizey,sizeof(char*));
     int i,j;
@@ -112,10 +111,10 @@ char ** init_lab(char*labdata,int sizex,int sizey)
         lab[i][j]=labdata[i*sizex+j];
     }
     return lab;
-}
+}*/
 //sizeY numero de lignes
 //sizeX numero de colonnes
-char** alloc_2D_array(int sizex,int sizey)
+/*char** alloc_2D_array(int sizex,int sizey)
 {
     char**lab=(char**)calloc(sizey,sizeof(char*));
     int i;
@@ -124,8 +123,8 @@ char** alloc_2D_array(int sizex,int sizey)
         lab[i]=calloc(sizex,sizeof(char));
     }
     return lab;
-}
-
+}*/
+/*
 
 t_data init_data(char*labdata,int sizex,int sizey,int player)
 {
@@ -202,7 +201,7 @@ void rotation_line_right(char **laby,int value,int sizex,int sizey)
         laby[value][(sizex+j+1)%sizex]=copy[value][j];
     laby[value][0]=temp;
 }
-
+*/
 
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
 {
@@ -320,7 +319,7 @@ int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,in
 }
 
 
-void print_laby(t_data data,int sizeX,int sizeY)
+void print_laby2(t_data data,int sizeX,int sizeY)
 {
     int i,j;
     for(i=0;i<sizeY;i++)
@@ -402,7 +401,20 @@ int main()
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
 	data.map=labData;
-
+    int size_path=0;
+    t_pos start={data.line,data.column};
+    t_pos treasure={data.line_treas,data.line_treas};
+    int column=sizeX;
+    int line=sizeY;
+    int found_path=0;
+    //print_laby(tab,column,line);
+    //printf("\n0");
+    ptr_List closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
+    t_pos* path=create_path(closedList,&size_path);
+    printf("fhbf%d\n\n",path[0].column);
+    listmoves(path,size_path,line,column);
+    printLabyrinth();
+    return 1;
     //printf("\n");
      do{
         /* display the labyrinth */
@@ -422,7 +434,7 @@ int main()
 
             }while(!jouer);
             printf("\n");
-            print_laby(data,sizeX,sizeY);
+            print_laby2(data,sizeX,sizeY);
             printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
             printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,alea,move.value);
             move.type=alea;

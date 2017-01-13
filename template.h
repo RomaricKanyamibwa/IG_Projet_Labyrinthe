@@ -1,6 +1,8 @@
 #ifndef TEMPLATE_H_INCLUDED
 #define TEMPLATE_H_INCLUDED
 
+#include "Aetoile.h"
+
 typedef struct t_data
 {
     char** lab;
@@ -11,5 +13,10 @@ typedef struct t_data
     int line_treas;
     int column_treas;
 }t_data;
+
+
+t_case Start;
+t_pos Treasure;
+//t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
 
 #endif // TEMPLATE_H_INCLUDED

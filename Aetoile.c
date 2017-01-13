@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Aetoile.h"
 #include <time.h>
+#include "array_mod.h"
+#include "Aetoile.h"
 
-typedef enum
+t_case Start;
+t_pos Treasure;
+
+/*typedef enum
 {
 	ROTATE_LINE_LEFT = 	0,
 	ROTATE_LINE_RIGHT = 1,
@@ -14,21 +18,20 @@ typedef enum
 	MOVE_LEFT = 6,
 	MOVE_RIGHT = 7,
 	DO_NOTHING = 8
-} t_typeMove;
+} t_typeMove;*/
 
-t_case Start;
-t_pos Treasure;
-t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+
 
 t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
 {
+        //if(size_path<1) return NULL;
         t_typeMove* listMoves=(t_typeMove*)calloc(size_path,sizeof(t_typeMove));
         if(listMoves == NULL)
         {
             fprintf(stderr, "Unable to allocate memory for new listmove\n");
             exit(-1);
         }
-        int i=0,j=size_path,end=0;
+        int i=0,j=size_path;//,end=0;
         for(i=size_path;i>0;i--)
         {
             //printf("\ni:%d j:%d ",i,j);
@@ -44,7 +47,7 @@ t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
                     if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) {listMoves[i-1]=-1;listMoves[i]=-1;}
                     if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) {listMoves[i-1]=-1;listMoves[i]=-1;}
                 }
-                if(path[i-2].column==0 &&path[i-2].line==0) end=1;
+                //if(path[i-2].column==0 &&path[i-2].line==0) end=1;
             //}else
                 //listMoves[i-1]=-1;
             }
@@ -75,88 +78,10 @@ t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
     return -1;
 }
 
-char** alloc_2D_array(int sizex,int sizey)
+
+
+ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** tab,int* found_path)
 {
-    char**lab=(char**)calloc(sizey,sizeof(char*));
-    if(lab == NULL)
-    {
-        fprintf(stderr, "Unable to allocate memory for new 2D array\n");
-        exit(-1);
-    }
-    int i;
-    for (i=0;i<sizey;i++)
-    {
-        lab[i]=calloc(sizex,sizeof(char));
-        if(lab[i] == NULL)
-    {
-        fprintf(stderr, "Unable to allocate memory for new 2D array\n");
-        exit(-1);
-    }
-    }
-    return lab;
-}
-
-char** create_table(int line,int column)
-{
-    char** tab=alloc_2D_array(column,line);
-    int i,j,k;
-    time_t t;
-    /* Intializes random number generator */
-    srand((unsigned) time(&t));
-    for(k=0;k<100;k++)
-    {
-        i=rand()%line;
-        j=rand()%column;
-        if(i!=7&&j!=10)tab[i][j]=1;
-    }
-    tab[10][7]=0;
-    tab[10][0]=0;
-
-    return tab;
-}
-
-void print_laby(char** tab,int sizeX,int sizeY)
-{
-    int i,j;
-    for(i=0;i<sizeY;i++)
-        {
-            printf("\n");
-            for(j=0;j<sizeX;j++)
-            {
-                if(i==10&&j==7)printf(" @");
-                else if(tab[i][j]==8)printf(" *");
-                    else printf(" %d",tab[i][j]);
-            }
-        }
-        //printf("\nEndPrint\n");
-}
-
-void change_tab(char** tab,t_pos* tab_cases,int size)
-{
-       int i;
-    for(i=0;i<size;i++)
-        {
-           printf("Debug size:%d ,i:%d line:%d column:%d\n",size,i,tab_cases[i].line,tab_cases[i].column);
-            if(tab_cases==NULL)printf("NULL");
-                if(tab[tab_cases[i].line][tab_cases[i].column]!=1)tab[tab_cases[i].line][tab_cases[i].column]=8;
-        }
-
-}
-
-int main()
-{
-    /*Treasure.line=3;
-    Treasure.column=4;
-    t_pos rnd={3,5};
-    int d=estim_distance(rnd);
-    printf("Dist :%d\n",d);*/
-    //int cnt=0;
-    int size_path=0;
-    t_pos start={10,0};
-    t_pos treasure={10,7};
-    int column=15;
-    int line=20;
-    char** tab=create_table(line,column);
     set_start(start,treasure);
     set_treasure(treasure);
     ptr_List closedList=NULL;
@@ -166,13 +91,11 @@ int main()
         fprintf(stderr, "Unable to allocate memory for new list\n");
         exit(-1);
     }
-    t_pos* path;
+    //t_pos* path;
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
     t_case c=openList->parent_case;
-    print_laby(tab,column,line);
-    printf("\n0");
     while(openList!=NULL)
     {
         //printf("openListcreate:\n");
@@ -187,9 +110,12 @@ int main()
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
             printf("YEAH PATH");
-            path=create_path(closedList,&size_path);
+            //path=create_path(closedList,&size_path);
+            *found_path=1;
             printf("YEAH PATH1");
-            break;
+            free(openList);
+            return closedList;
+            //break;
         }else
         {
             //sizeY numero de lignes
@@ -201,12 +127,36 @@ int main()
         }
 
     }
+    free(openList);
+    return closedList;
+
+}
+
+/*int main()
+{
+    Treasure.line=3;
+    Treasure.column=4;
+    t_pos rnd={3,5};
+    int d=estim_distance(rnd);
+    printf("Dist :%d\n",d);
+    //int cnt=0;
+    int size_path=0;
+    t_pos start={10,0};
+    t_pos treasure={10,7};
+    int column=15;
+    int line=20;
+    char** tab=create_table(line,column);
+    int found_path=0;
+    print_laby(tab,column,line);
+    printf("\n0");
+    ptr_List closedList=get_closedList(line,column,start,treasure,tab,&found_path);
+    t_pos* path=create_path(closedList,&size_path);
     printf("\n1");
     //print_laby(tab,column,line);
     printf("\n1");
     //set_sizeList(openList);
-    printf("\nOpenList\n");
-    print_list(openList,tab);
+    //printf("\nOpenList\n");
+    //print_list(openList,tab);
     //openList=deleteElemList(openList,openList->next_case->parent_case);
     //openList->size_list=get_sizeList(openList);
     printf("\n");
@@ -219,14 +169,15 @@ int main()
     print_laby(tab,column,line);
     printf("\nEnd\n");
     listmoves(path,size_path,line,column);
-    free(path);
+    //free(path);
+    if(!found_path) printf("Chemin non trouvé\n");
     printf("\nEndMoves\n");
     free(closedList);
-    printf("\nEnd\n");
-    free(openList);
+    //printf("\nEnd\n");
+    //free(openList);
     printf("\nEnd\n");
     return 1;
-}
+}*/
 
 /**
     ROTATE_LINE_LEFT = 	0,
