@@ -95,6 +95,7 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
+    printf("\nTreasure MyLine=%d et MyColYumn=%d\n",Treasure.line_treas,Treasure.column);
     printf("\nOpenList\n");
     print_list(openList,tab);
     printf("\n");
@@ -112,10 +113,10 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
         //if(closedList!=NULL)printf("Closed not Null %d",closedList->parent_case.cost+3);
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
-            printf("YEAH PATH");
+            printf("YEAH PATH\n");
             //path=create_path(closedList,&size_path);
             *found_path=1;
-            printf("YEAH PATH1");
+            printf("YEAH PATH1\n");
             free(openList);
             return closedList;
             //break;
