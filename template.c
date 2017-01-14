@@ -386,7 +386,16 @@ int main()
 	t_data data;						/* a move */
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
-    int alea,jouer=0;
+    int alea,jouer=0,path_index=0;
+    int column=sizeX;
+    int line=sizeY;
+    int found_path=0,i;
+    int size_path=0;
+    t_pos start,treasure;
+    t_pos* path;
+    ptr_List closedList;
+    t_typeMove* getmoves;
+    t_typeMove* sendmoves;
     debug=1;
 	//int rotate=0;
 
@@ -401,27 +410,33 @@ int main()
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
 	data.map=labData;
-    int size_path=0;
-    t_pos start={data.line,data.column};
-    t_pos treasure={data.line_treas,data.column_treas};
-    int column=sizeX;
-    int line=sizeY;
-    int found_path=0;
+    start={data.line,data.column};
+    treasure={data.line_treas,data.column_treas};
     //print_laby(tab,column,line);
     //printf("\n0");
     printf("\n");
     print_laby2(data,sizeX,sizeY);
     printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
-    printf("\nTreasure MyLine=%d et MyColYumn=%d\n",data.line_treas,data.column_treas);
-    ptr_List closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
-    print_list(closedList,data.lab);
-    t_pos* path=create_path(closedList,&size_path);
+    printf("\nTreasure MyLine=%d et MyColumn=%d\n",data.line_treas,data.column_treas);
+    closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
+    //print_list(closedList,data.lab);
+    path=create_path(closedList,&size_path);
     printf("SizeX:%d SizeY:%d\n",sizeX,sizeY);
     printf("Test\n\n");
-    listmoves(path,size_path,line,column);
+    getmoves=listmoves(path,size_path,line,column);
+    sendmoves=calloc(size_path,size_path);
     printLabyrinth();
-    return 1;
     //printf("\n");
+    for(i=0;i<size_path;i++)
+    {
+        if(getmoves[i]!=-1)
+        {
+            sendmoves[path_index]=getmoves[i];
+            printf("Move %d:%d ,",path_index+1,getmoves[i]);
+            path_index++;
+        }
+    }
+    return 1;
      do{
         /* display the labyrinth */
         printLabyrinth();
