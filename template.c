@@ -410,8 +410,9 @@ int main()
     //print_laby(tab,column,line);
     //printf("\n0");
     ptr_List closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
+    print_list(closedList,data.lab);
     t_pos* path=create_path(closedList,&size_path);
-    printf("fhbf%d\n\n",path[0].column);
+    printf("Test\n\n");
     listmoves(path,size_path,line,column);
     printLabyrinth();
     return 1;
