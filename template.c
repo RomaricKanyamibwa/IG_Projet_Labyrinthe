@@ -403,7 +403,7 @@ int main()
 	data.map=labData;
     int size_path=0;
     t_pos start={data.line,data.column};
-    t_pos treasure={data.line_treas,data.line_treas};
+    t_pos treasure={data.line_treas,data.column_treas};
     int column=sizeX;
     int line=sizeY;
     int found_path=0;
