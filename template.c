@@ -409,7 +409,7 @@ int main()
     int found_path=0;
     //print_laby(tab,column,line);
     //printf("\n0");
-    rintf("\n");
+    printf("\n");
     print_laby2(data,sizeX,sizeY);
     printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
     printf("\nTreasure MyLine=%d et MyColYumn=%d\n",data.line_treas,data.column_treas);
