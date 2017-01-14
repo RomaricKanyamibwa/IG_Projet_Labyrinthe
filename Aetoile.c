@@ -95,6 +95,9 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
+    printf("\nOpenList\n");
+    print_list(openList,tab);
+    printf("\n");
     t_case c=openList->parent_case;
     while(openList!=NULL)
     {
@@ -128,6 +131,9 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
 
     }
     free(openList);
+    printf("\nClosedList\n");
+    print_list(closedList,tab);
+    printf("\n");
     return closedList;
 
 }
