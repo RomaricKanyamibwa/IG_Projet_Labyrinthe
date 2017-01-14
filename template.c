@@ -416,7 +416,7 @@ int main()
     ptr_List closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
     print_list(closedList,data.lab);
     t_pos* path=create_path(closedList,&size_path);
-    printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,path[1],-3);
+    printf("SizeX:%d SizeY:%d\n",sizeX,sizeY);
     printf("Test\n\n");
     listmoves(path,size_path,line,column);
     printLabyrinth();
