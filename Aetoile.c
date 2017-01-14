@@ -473,7 +473,7 @@ void print_list(ptr_List list,char** lab)
     tmp=list;
     while(tmp!=NULL)
     {
-        printf("CASE:%d ,%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d\n",lab[tmp->parent_case.pos.line][tmp->parent_case.pos.column],i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.line,tmp->parent_case.pos_p.column,tmp->parent_case.cost,tmp->parent_case.heuristic);
+        printf("CASE:%d ,%d:Size %d: (x:%d,y:%d),(xp:%d,yp:%d),cost:%d heur:%d\n",lab[tmp->parent_case.pos.line][tmp->parent_case.pos.column],i++,tmp->size_list,tmp->parent_case.pos.column,tmp->parent_case.pos.line,tmp->parent_case.pos_p.column,tmp->parent_case.pos_p.line,tmp->parent_case.cost,tmp->parent_case.heuristic);
         tmp=tmp->next_case;
         //i++;
     }
