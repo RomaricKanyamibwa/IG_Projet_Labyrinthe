@@ -210,6 +210,49 @@ void update_lab(t_move move,t_data* data,int sizeX,int sizeY)
 
 }
 
+t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column,int* found_path,int* path_index)
+{
+
+    t_pos* path;
+    ptr_List closedList;
+    t_typeMove* getmoves;
+    t_typeMove* sendmoves;
+    int size_path=0,i;
+    int sizeX=column,sizeY=line;
+
+    *path_index=0;
+    start.line=data.line;
+    start.column=data.column;
+    treasure.line=data.line_treas;
+    treasure.column=data.column_treas;
+    //print_laby(tab,column,line);
+    //printf("\n0");
+    printf("\n");
+    print_laby2(data,sizeX,sizeY);
+    printf("\nMyLine=%d et MyColumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
+    printf("\nTreasure MyLine=%d et MyColumn=%d\n",data.line_treas,data.column_treas);
+    closedList=get_closedList(line,column,start,treasure,data.lab,found_path);
+    //print_list(closedList,data.lab);
+    path=create_path(closedList,&size_path);
+    printf("SizeX:%d SizeY:%d\n",sizeX,sizeY);
+    printf("Test\n\n");
+    getmoves=listmoves(path,size_path,line,column);
+    sendmoves=calloc(size_path,sizeof(t_typeMove));
+    printLabyrinth();
+    //printf("\n");
+    for(i=0;i<size_path;i++)
+    {
+        if(getmoves[i]!=-1)
+        {
+            sendmoves[*path_index]=getmoves[i];
+            //printf("Move %d:%d \n,",path_index+1,getmoves[i]);
+            *path_index++;
+        }
+    }
+    free(closedList);
+
+    return sendmoves;
+}
 
 int main()
 {
@@ -262,7 +305,7 @@ int main()
     printf("SizeX:%d SizeY:%d\n",sizeX,sizeY);
     printf("Test\n\n");
     getmoves=listmoves(path,size_path,line,column);
-    sendmoves=calloc(size_path,size_path);
+    sendmoves=calloc(size_path,sizeof(t_typeMove));
     printLabyrinth();
     //printf("\n");
     for(i=0;i<size_path;i++)
@@ -284,6 +327,12 @@ int main()
           {
             ret = getMove( &move);
             update_lab(move,&data,sizeX,sizeY);
+            if(move.type<4)
+            {
+                i=0;
+                sendmoves=tab_moves(data,start,treasure,line,column,&found_path,&path_index);
+                return 1;
+            }
             //playMove( &lab, move);
             }
         else
