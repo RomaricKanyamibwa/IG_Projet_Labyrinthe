@@ -243,7 +243,7 @@ t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column
         if(getmoves[i]!=-1)
         {
             sendmoves[*path_index]=getmoves[i];
-            //printf("Move %d:%d \n,",path_index+1,getmoves[i]);
+            printf("Move %d:%d \n,",path_index+1,getmoves[i]);
             *path_index++;
         }
     }
