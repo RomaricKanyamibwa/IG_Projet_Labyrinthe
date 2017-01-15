@@ -280,14 +280,18 @@ int main()
                 else if(path_index>=i)alea=move_player(&data,&move,&jouer,sizeX,sizeY,sendmoves[i]);
                     else alea=move_player(&data,&move,&jouer,sizeX,sizeY,rand()%9);
                 i=i+1;
-                //else alea=move_player(&data,&move,&jouer,sizeX,sizeY,rand()%9);*
+                //if(dist_enemy<4)
+                //{
+                    //if(data.column-data.column_treas>0)
+                //}
                 update_lab(move,&data_enemy,sizeX,sizeY);
+
 
             }while(!jouer);
             move.type=alea;
             ret = sendMove(move);
             jouer=0;
-            printf("\nEnemyLine=%d et EnemyColumn=%d distance:%d\n",data_enemy.line,data_enemy.column,dist_enemy);
+            //printf("\nEnemyLine=%d et EnemyColumn=%d distance:%d\n",data_enemy.line,data_enemy.column,dist_enemy);
           }
           if ((player ==1 && ret == MOVE_WIN) || (player==0 && ret == MOVE_LOSE))
           printf("I lose the game\n");
