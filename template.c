@@ -238,8 +238,6 @@ t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column
     printf("Test\n\n");
     getmoves=listmoves(path,size_path,line,column);
     sendmoves=calloc(size_path,sizeof(t_typeMove));
-    printLabyrinth();
-    //printf("\n");
     for(i=0;i<size_path;i++)
     {
         if(getmoves[i]!=-1)
@@ -306,8 +304,6 @@ int main()
     printf("Test\n\n");
     getmoves=listmoves(path,size_path,line,column);
     sendmoves=calloc(size_path,sizeof(t_typeMove));
-    printLabyrinth();
-    //printf("\n");
     for(i=0;i<size_path;i++)
     {
         if(getmoves[i]!=-1)
@@ -331,7 +327,7 @@ int main()
             {
                 i=0;
                 sendmoves=tab_moves(data,start,treasure,line,column,&found_path,&path_index);
-                return 1;
+                //return 1;
             }
             //playMove( &lab, move);
             }
@@ -339,7 +335,8 @@ int main()
           {
             do{
 
-            alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i++]);
+            /*if(path_index>=i)*/alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i++]);
+            //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
 
             }while(!jouer);
             printf("\n");
