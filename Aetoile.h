@@ -3,6 +3,8 @@
 
 #include "labyrinthAPI.h"
 
+/**Structure pour A* **/
+
 typedef struct t_pos
 {
     int line;
@@ -23,27 +25,24 @@ typedef struct t_List
 {
     int size_list;//taille de la liste
     t_case parent_case;//case courante
-    //t_typeMove move:8;//commande à donner au server pour se deplacer à la case parent_case
     struct t_List* next_case;//case suivante
 
-}t_List;
+}t_List;//la structure de la Closed/Open list
 
 typedef t_List* ptr_List;
 
-t_typeMove* listmoves(t_pos* path,int size_path,int line,int column);
-t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+/** Fonction pour le A* **/
+
+t_typeMove* listmoves(t_pos* path,int size_path,int line,int column);//cette fonction retourne la liste de mouvements à faire pour faire le chemin path
+t_typeMove get_move(t_pos Start,t_pos End,int line,int column);//Le mouvement à effectuer
 ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** tab,int* found_path);//Cette fonction construit la closedList
 void set_start(t_pos start,t_pos Treasure);//position du debut
 void set_treasure(t_pos treas);//definition de la position du tresor
 int estim_distance(t_pos x_y,t_pos Treasure);//estimation de la distance entre la case x_y et le tresor
 t_case nouvelle_case(t_case c,t_pos pos,t_pos Treasure);//creation de la nouvelle case à ajouter dans la liste
 ptr_List addElemList(ptr_List list,t_case c);//ajout d'une case à la liste
-ptr_List push(ptr_List list,t_case c);//ajout d'une case au debut de la liste
 int search(ptr_List list,t_case value);//recherche si value dans list
 ptr_List deleteElemList(ptr_List list,t_case c);//suppression de la case c
-ptr_List pop(ptr_List list);//on enleve le premier element de la liste
-ptr_List copyList(ptr_List list);//on fait une copie de la liste list
-t_case copyCase(t_case c);//copy de la case "c"
 int comp_case(t_case c1,t_case c2);//comparaison de deux cases,on renvoi 1 si c1=c2 0 sinon
 t_case min_case(ptr_List list);//min case de la list
 int comp_2case(t_case c1,t_case c2);//2eme fonction de comparaison des cases

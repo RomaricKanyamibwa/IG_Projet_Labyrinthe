@@ -7,19 +7,6 @@
 t_case Start;
 t_pos Treasure;
 
-/*typedef enum
-{
-	ROTATE_LINE_LEFT = 	0,
-	ROTATE_LINE_RIGHT = 1,
-	ROTATE_COLUMN_UP = 2,
-	ROTATE_COLUMN_DOWN = 3,
-	MOVE_UP = 4,
-	MOVE_DOWN = 5,
-	MOVE_LEFT = 6,
-	MOVE_RIGHT = 7,
-	DO_NOTHING = 8
-} t_typeMove;*/
-
 
 
 t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
@@ -141,11 +128,6 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
 
 /*int main()
 {
-    Treasure.line=3;
-    Treasure.column=4;
-    t_pos rnd={3,5};
-    int d=estim_distance(rnd);
-    printf("Dist :%d\n",d);
     //int cnt=0;
     int size_path=0;
     t_pos start={10,0};
@@ -186,16 +168,6 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
     return 1;
 }*/
 
-/**
-    ROTATE_LINE_LEFT = 	0,
-	ROTATE_LINE_RIGHT = 1,
-	ROTATE_COLUMN_UP = 2,
-	ROTATE_COLUMN_DOWN = 3,
-	MOVE_UP = 4,
-	MOVE_DOWN = 5,
-	MOVE_LEFT = 6,
-	MOVE_RIGHT = 7,
-	DO_NOTHING = 8**/
 //sizeY numero de lignes
 //sizeX numero de colonnes
 ptr_List add_neighbor(ptr_List list,ptr_List list2,t_case c,t_pos Treasure,int sizeX,int sizeY,char** lab)
@@ -367,48 +339,22 @@ ptr_List addElemList(ptr_List list,t_case c)
 
 ptr_List deleteElemList(ptr_List currP, t_case value)
 {
-  /* See if we are at end of list. */
   if (currP == NULL)
     return NULL;
 
-  /*
-   * Check to see if current node is one
-   * to be deleted.
-   */
   if (comp_case(currP->parent_case,value))
    {
     ptr_List tempNextP;
-
-    /* Save the next pointer in the node. */
     tempNextP = currP->next_case;
-    //if(tempNextP!=NULL) tempNextP->size_list=get_sizeList(tempNextP);
-    /* Deallocate the node. */
+
     free(currP);
 
-    /*
-     * Return the NEW pointer to where we
-     * were called from.  I.e., the pointer
-     * the previous call will use to "skip
-     * over" the removed node.
-     */
-    //printf("delete\n");
     return tempNextP;
   }
 
-  /*
-   * Check the rest of the list, fixing the next
-   * pointer in case the next node is the one
-   * removed.
-   */
   currP->next_case = deleteElemList(currP->next_case, value);
   if(currP!=NULL) currP->size_list=get_sizeList(currP);
 
-
-  /*
-   * Return the pointer to where we were called
-   * from.  Since we did not remove this node it
-   * will be the same.
-   */
   return currP;
 }
 
@@ -450,17 +396,6 @@ int get_sizeList(ptr_List list)
     free(tmp);
     return size;
 }
-
-/**ptr_List set_sizeList(ptr_List list)
-{
-    ptr_List tmp=malloc(sizeof(list));
-    tmp=list;
-    while(tmp!=NULL)
-    {
-        tmp->size_list=get_sizeList(tmp);
-    }
-    return list;
-}**/
 
 void print_list(ptr_List list,char** lab)
 {

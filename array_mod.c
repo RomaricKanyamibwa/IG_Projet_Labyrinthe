@@ -96,7 +96,8 @@ t_data init_data(char*labdata,int sizex,int sizey,int player)
     t_data data;
     data.lab=init_lab(labdata,sizex,sizey);
     data.line=sizey/2;
-    data.energy=player;
+    if(player)data.energy=player+1;
+    else data.energy=player;
     if(player)
         data.column=sizex-1;
     else
