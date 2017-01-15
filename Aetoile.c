@@ -18,42 +18,36 @@ t_typeMove* listmoves(t_pos* path,int size_path,int line,int column)
             fprintf(stderr, "Unable to allocate memory for new listmove\n");
             exit(-1);
         }
-        int i=0,j=size_path;//,end=0;
+        int i=0,j=size_path;
         for(i=size_path;i>0;i--)
         {
-            //printf("\ni:%d j:%d ",i,j);
-            //if(!end)
-            //{
-                listMoves[i-1]=get_move(path[i-2],path[j-1],line,column);
-                if(listMoves[i-1]!=-1) j=i-1;
-                else j=j;
-                if(i!=size_path)
-                {
-                    if(listMoves[i]==MOVE_DOWN&&listMoves[i-1]==MOVE_UP) {listMoves[i-1]=-1;listMoves[i]=-1;}
-                    if(listMoves[i]==MOVE_UP&&listMoves[i-1]==MOVE_DOWN) {listMoves[i-1]=-1;listMoves[i]=-1;}
-                    if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) {listMoves[i-1]=-1;listMoves[i]=-1;}
-                    if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) {listMoves[i-1]=-1;listMoves[i]=-1;}
-                }
-                //if(path[i-2].column==0 &&path[i-2].line==0) end=1;
-            //}else
-                //listMoves[i-1]=-1;
+
+            listMoves[i-1]=get_move(path[i-2],path[j-1],line,column);
+            if(listMoves[i-1]!=-1) j=i-1;
+            else j=j;
+            if(i!=size_path)
+            {
+                if(listMoves[i]==MOVE_DOWN&&listMoves[i-1]==MOVE_UP) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                if(listMoves[i]==MOVE_UP&&listMoves[i-1]==MOVE_DOWN) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                if(listMoves[i]==MOVE_LEFT&&listMoves[i-1]==MOVE_RIGHT) {listMoves[i-1]=-1;listMoves[i]=-1;}
+                if(listMoves[i]==MOVE_RIGHT&&listMoves[i-1]==MOVE_LEFT) {listMoves[i-1]=-1;listMoves[i]=-1;}
             }
+
+        }
         listMoves[0]=-1;
-        for(i=0;i<size_path;i++)
+        /*for(i=0;i<size_path;i++)
         {
             if(listMoves[i]==MOVE_DOWN)printf("Down\n");
             else if(listMoves[i]==MOVE_LEFT)printf("Left\n");
                 else if(listMoves[i]==MOVE_RIGHT)printf("Right\n");
                     else if(listMoves[i]==MOVE_UP)printf("UP\n");
                         //else printf("Ignore\n");
-        }
-        printf("\n");
+        }*/
         return listMoves;
 }
 
 t_typeMove get_move(t_pos Start,t_pos End,int line,int column)
 {
-    //printf("dx:%d et dy:%d\n",Start.column-End.column,Start.line-End.line);
     if(Start.column-End.column==1&&Start.line-End.line==0) return MOVE_LEFT;
     if(Start.column-End.column==-1&&Start.line-End.line==0) return MOVE_RIGHT;
     if(Start.line-End.line==1&&Start.column-End.column==0) return MOVE_UP;
@@ -78,95 +72,33 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
         fprintf(stderr, "Unable to allocate memory for new list\n");
         exit(-1);
     }
-    //t_pos* path;
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
-    //printf("\nTreasure MyLine=%d et MyColYumn=%d\n",Treasure.line,Treasure.column);
-    printf("\nOpenList\n");
-    print_list(openList,tab);
-    printf("\n");
+    //print_list(openList,tab);
     t_case c=openList->parent_case;
     while(openList!=NULL)
     {
-        //printf("openListcreate:\n");
-        //print_list(openList);
-        //cnt++;
         c=min_case(openList);
-        //printf("Heuristique openList:%d\n",openList->parent_case.heuristic);
         openList=deleteElemList(openList,c);
-        //if(openList==NULL) printf("Open NULL\n");
         closedList=addElemList(closedList,c);
-        //if(closedList!=NULL)printf("Closed not Null %d",closedList->parent_case.cost+3);
         if(c.pos.line==Treasure.line && c.pos.column==Treasure.column)
         {
-            printf("YEAH PATH\n");
-            //path=create_path(closedList,&size_path);
             *found_path=1;
-            printf("YEAH PATH1\n");
             free(openList);
             return closedList;
-            //break;
         }else
         {
-            //sizeY numero de lignes
-            //sizeX numero de colonnes
             openList=add_neighbor(openList,closedList,c,Treasure,column,line,tab);
-            //printf("size open: %d\n",openList->size_list);
-            //printf("vois1: %d\n",openList->parent_case.pos.line);
-            //if(cnt>50)break;
+
         }
 
     }
     free(openList);
-    printf("\nClosedList\n");
-    print_list(closedList,tab);
-    printf("\n");
     return closedList;
 
 }
 
-/*int main()
-{
-    //int cnt=0;
-    int size_path=0;
-    t_pos start={10,0};
-    t_pos treasure={10,7};
-    int column=15;
-    int line=20;
-    char** tab=create_table(line,column);
-    int found_path=0;
-    print_laby(tab,column,line);
-    printf("\n0");
-    ptr_List closedList=get_closedList(line,column,start,treasure,tab,&found_path);
-    t_pos* path=create_path(closedList,&size_path);
-    printf("\n1");
-    //print_laby(tab,column,line);
-    printf("\n1");
-    //set_sizeList(openList);
-    //printf("\nOpenList\n");
-    //print_list(openList,tab);
-    //openList=deleteElemList(openList,openList->next_case->parent_case);
-    //openList->size_list=get_sizeList(openList);
-    printf("\n");
-    printf("\nClosedList\n");
-    print_list(closedList,tab);
-    printf("\n");
-    printf("\nReconstath\n");
-    change_tab(tab,path,size_path);
-    printf("\nPrint Path\n");
-    print_laby(tab,column,line);
-    printf("\nEnd\n");
-    listmoves(path,size_path,line,column);
-    //free(path);
-    if(!found_path) printf("Chemin non trouvé\n");
-    printf("\nEndMoves\n");
-    free(closedList);
-    //printf("\nEnd\n");
-    //free(openList);
-    printf("\nEnd\n");
-    return 1;
-}*/
 
 //sizeY numero de lignes
 //sizeX numero de colonnes
@@ -205,7 +137,6 @@ t_pos* create_path(ptr_List list,int* size_path)
 {
     if(list==NULL) return NULL;
     ptr_List prec=list;
-    //printf("\nDebug1");
     ptr_List tmp=list->next_case;
     t_pos* path;
     if(tmp!=NULL) path=calloc(tmp->size_list+1,sizeof(t_pos));
@@ -215,11 +146,8 @@ t_pos* create_path(ptr_List list,int* size_path)
         fprintf(stderr, "Unable to allocate memory for new path\n");
         exit(-1);
     }
-    //printf("\nDebug1");
     int i=0;
-    //path[i++]=tmp->parent_case.pos_p;
     tmp=list->next_case;
-    //printf("\nDebug1");
     while(tmp!=NULL)
     {
         if(!search_path(path,tmp->parent_case.pos_p,i+1)||(tmp->parent_case.pos_p.column==list->parent_case.pos.column&&tmp->parent_case.pos_p.line==list->parent_case.pos.line))
@@ -227,12 +155,8 @@ t_pos* create_path(ptr_List list,int* size_path)
         prec=tmp;
         tmp=tmp->next_case;
     }
-    //printf("\nDebug1");
     path[i]=prec->parent_case.pos;
     *size_path=i+1;
-    //printf("\nI:%i Size:%d",i,list->size_list);
-    //for(i=i;i>=0;i--)
-        //printf("\nX:%d Y:%d\n",path[i].column,path[i].line);
     return path;
 
 }
@@ -361,10 +285,8 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
 
 int comp_case(t_case c1,t_case c2)
 {
-    if (/*c1.cost==c2.cost &&*/ c1.pos.line==c2.pos.line && c1.pos.column==c2.pos.column
-    )//&& c1.pos_p.line==c2.pos_p.line && c1.pos_p.column==c2.pos_p.column )
-        return 1;
-    return 0;
+    if (c1.pos.line==c2.pos.line && c1.pos.column==c2.pos.column)
+        return 0;
 }
 
 int comp_2case(t_case c1,t_case c2)
