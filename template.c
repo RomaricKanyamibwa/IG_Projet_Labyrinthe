@@ -249,7 +249,7 @@ int main()
     treasure.line=data.line_treas;
     treasure.column=data.column_treas;
     line=sizeY;
-    column=sizeX
+    column=sizeX;
     //print_laby(tab,column,line);
     //printf("\n0");
     printf("\n");
