@@ -254,7 +254,7 @@ int main()
     //printf("\n0");
     printf("\n");
     print_laby2(data,sizeX,sizeY);
-    printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
+    printf("\nMyLine=%d et MyColumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
     printf("\nTreasure MyLine=%d et MyColumn=%d\n",data.line_treas,data.column_treas);
     closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
     //print_list(closedList,data.lab);
@@ -270,12 +270,13 @@ int main()
         if(getmoves[i]!=-1)
         {
             sendmoves[path_index]=getmoves[i];
-            printf("Move %d:%d \n,",path_index+1,getmoves[i]);
+            //printf("Move %d:%d \n,",path_index+1,getmoves[i]);
             path_index++;
         }
     }
-    return 1;
-     do{
+    //return 1;
+    i=0;
+    do{
         /* display the labyrinth */
         printLabyrinth();
 
@@ -289,7 +290,7 @@ int main()
           {
             do{
 
-            alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY);
+            alea=sendmoves[i++];//move_player(&data,&move,labData,&jouer,sizeX,sizeY);
 
             }while(!jouer);
             printf("\n");
