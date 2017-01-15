@@ -23,10 +23,10 @@ extern int debug;	/* hack to enable debug messages */
 t_case Start;// Position du depart
 t_pos Treasure;// Coordonnees du Tresor
 
-int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY)
+int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY,t_typeMove move_to_do)
 {
 
-    int alea=rand()%9;
+    int alea=move_to_do;//rand()%9;
     //printf("Enter a number from 0 to 8:");
     //scanf("%d",&alea);
     int rotate=0;
@@ -290,7 +290,7 @@ int main()
           {
             do{
 
-            alea=sendmoves[i++];//move_player(&data,&move,labData,&jouer,sizeX,sizeY);
+            alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i++]);
 
             }while(!jouer);
             printf("\n");
