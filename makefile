@@ -21,7 +21,7 @@ template.o:template.h Aetoile.h  array_mod.h
 
 Aetoile.o: Aetoile.h array_mod.h
 
-array_mod.o: array_mod.h
+array_mod.o: array_mod.h template.h
 
 
 # règles de compilation

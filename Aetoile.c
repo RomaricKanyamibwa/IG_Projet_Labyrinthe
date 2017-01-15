@@ -82,7 +82,7 @@ ptr_List get_closedList(int line,int column,t_pos start,t_pos treasure,char** ta
     openList->size_list=1;
     openList->parent_case=Start;
     openList->next_case=NULL;
-    printf("\nTreasure MyLine=%d et MyColYumn=%d\n",Treasure.line,Treasure.column);
+    //printf("\nTreasure MyLine=%d et MyColYumn=%d\n",Treasure.line,Treasure.column);
     printf("\nOpenList\n");
     print_list(openList,tab);
     printf("\n");
