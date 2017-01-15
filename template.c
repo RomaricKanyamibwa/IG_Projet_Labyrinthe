@@ -191,7 +191,6 @@ t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column
     t_typeMove* getmoves;
     t_typeMove* sendmoves;
     int size_path=0,i;
-    int sizeX=column,sizeY=line;
 /**Initialization des variables**/
     *path_index=0;
     start.line=data.line;
@@ -230,7 +229,6 @@ int main()
     int column;
     int line;
     int found_path=0,i;
-    int size_path=0;
     t_pos start,treasure;
     t_typeMove* sendmoves;
     debug=1;

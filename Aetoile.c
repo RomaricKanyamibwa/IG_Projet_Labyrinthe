@@ -286,7 +286,8 @@ ptr_List deleteElemList(ptr_List currP, t_case value)
 int comp_case(t_case c1,t_case c2)
 {
     if (c1.pos.line==c2.pos.line && c1.pos.column==c2.pos.column)
-        return 0;
+        return 1
+    return 0;
 }
 
 int comp_2case(t_case c1,t_case c2)
