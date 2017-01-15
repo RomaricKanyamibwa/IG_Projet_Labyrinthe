@@ -280,7 +280,7 @@ int main()
 
 
 	/* wait for a game, and retrieve informations about it */
-    waitForLabyrinth( "PLAY_RANDOM timeout=100 rotation=False", labName, &sizeX, &sizeY);
+    waitForLabyrinth( "ASTAR timeout=100 rotation=False", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
 	data=init_data(labData,sizeX,sizeY,player);
@@ -294,7 +294,7 @@ int main()
     //print_laby(tab,column,line);
     //printf("\n0");
     printf("\n");
-    print_laby2(data,sizeX,sizeY);
+    //print_laby2(data,sizeX,sizeY);
     printf("\nMyLine=%d et MyColumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
     printf("\nTreasure MyLine=%d et MyColumn=%d\n",data.line_treas,data.column_treas);
     closedList=get_closedList(line,column,start,treasure,data.lab,&found_path);
@@ -341,8 +341,8 @@ int main()
                 //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
 
             }while(!jouer);
-            printf("\n");
-            print_laby2(data,sizeX,sizeY);
+            //printf("\n");
+            //print_laby2(data,sizeX,sizeY);
             printf("\nMyLine=%d et MyColYumn=%d\n",data.line,data.column);//data.line est le numero de la ligne et data.column est le numero de la colonne
             printf("SizeX:%d SizeY:%d Move=%d Value=%d\n",sizeX,sizeY,alea,move.value);
             move.type=alea;
