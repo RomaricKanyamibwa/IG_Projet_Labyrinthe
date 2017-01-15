@@ -270,7 +270,7 @@ int main()
         if(getmoves[i]!=-1)
         {
             sendmoves[path_index]=getmoves[i];
-            printf("Move %d:%d ,",path_index+1,getmoves[i]);
+            printf("Move %d:%d \n,",path_index+1,getmoves[i]);
             path_index++;
         }
     }
