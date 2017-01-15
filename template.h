@@ -19,7 +19,7 @@ t_pos Treasure;// Coordonnees du Tresor
 
 void update_lab(t_move move,t_data* data,int sizeX,int sizeY);// Fonction de mise à jour du labyrinthe
 int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY,t_typeMove move_to_do);//Fonction de deplacement avec rand
-t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column,int* found_path,int* path_index);
-//t_typeMove get_move(t_pos Start,t_pos End,int line,int column);
+t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column,int* found_path,int* path_index);//cette fonction retourne un tableau avec les mouvement à faire pour arriver au tresor
+void print_laby2(t_data data,int sizeX,int sizeY);//fonction d'affichage du labyrinthe
 
 #endif // TEMPLATE_H_INCLUDED
