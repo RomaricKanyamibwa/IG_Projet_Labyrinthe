@@ -221,8 +221,8 @@ int main()
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0,path_index=0;
-    int column=sizeX;
-    int line=sizeY;
+    int column;
+    int line;
     int found_path=0,i;
     int size_path=0;
     t_pos start,treasure;
@@ -248,6 +248,8 @@ int main()
     start.column=data.column;
     treasure.line=data.line_treas;
     treasure.column=data.column_treas;
+    line=sizeY;
+    column=sizeX
     //print_laby(tab,column,line);
     //printf("\n0");
     printf("\n");
