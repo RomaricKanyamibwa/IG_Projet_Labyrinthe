@@ -243,7 +243,7 @@ t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column
         if(getmoves[i]!=-1)
         {
             sendmoves[*path_index]=getmoves[i];
-            printf("Move %d:%d \n,",path_index+1,getmoves[i]);
+            //printf("Move %d:%d \n,",*path_index+1,getmoves[i]);
             *path_index++;
         }
     }
@@ -334,9 +334,11 @@ int main()
         else
           {
             do{
-
-            /*if(path_index>=i)*/alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i++]);
-            //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
+                if(path_index<=0)alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
+                else if(path_index>=i)alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i]);
+                    else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
+                i=i+1;
+                //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
 
             }while(!jouer);
             printf("\n");
