@@ -244,7 +244,7 @@ t_typeMove* tab_moves(t_data data,t_pos start,t_pos treasure,int line,int column
         {
             sendmoves[*path_index]=getmoves[i];
             //printf("Move %d:%d \n,",*path_index+1,getmoves[i]);
-            *path_index++;
+            *path_index=*path_index+1;
         }
     }
     free(closedList);
