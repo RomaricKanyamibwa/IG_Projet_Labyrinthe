@@ -23,7 +23,7 @@ extern int debug;	/* hack to enable debug messages */
 t_case Start;// Position du depart
 t_pos Treasure;// Coordonnees du Tresor
 
-int move_player(t_data* data,t_move* move,char *labData,int *jouer ,int sizeX,int sizeY,t_typeMove move_to_do)
+int move_player(t_data* data,t_move* move,int *jouer ,int sizeX,int sizeY,t_typeMove move_to_do)
 {
 
     int alea=move_to_do;//rand()%9;
@@ -225,7 +225,7 @@ int main()
 	t_data data,data_enemy;						/* a move */
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
-    int alea,jouer=0,path_index=0;
+    int alea,jouer=0,jouer2=0,path_index=0;
     int column;
     int line,dist_enemy;
     int found_path=0,i;
@@ -266,7 +266,7 @@ int main()
           {
                 ret = getMove( &move);
                 update_lab(move,&data,sizeX,sizeY);
-                update_lab(move,&data_enemy,sizeX,sizeY);
+                move_player(&data_enemy,&move,&jouer2,sizeX,sizeY,move.type);
                 if(move.type<4)
                 {
                     i=0;
@@ -276,12 +276,12 @@ int main()
         else
           {
             do{
-                if(path_index<=0)alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
-                else if(path_index>=i)alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,sendmoves[i]);
-                    else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
+                if(path_index<=0)alea=move_player(&data,&move,&jouer,sizeX,sizeY,rand()%9);
+                else if(path_index>=i)alea=move_player(&data,&move,&jouer,sizeX,sizeY,sendmoves[i]);
+                    else alea=move_player(&data,&move,&jouer,sizeX,sizeY,rand()%9);
                 i=i+1;
-                //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
-
+                //else alea=move_player(&data,&move,&jouer,sizeX,sizeY,rand()%9);*
+                update_lab(move,&data_enemy,sizeX,sizeY);
 
             }while(!jouer);
             move.type=alea;
