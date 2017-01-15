@@ -222,14 +222,14 @@ int main()
 	char* labData;						/* data of the labyrinth */
 	t_return_code ret = MOVE_OK;		/* indicates the status of the previous move */
 	t_move move;
-	t_data data;						/* a move */
+	t_data data,data_enemy;						/* a move */
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0,path_index=0;
     int column;
-    int line;
+    int line,dist_enemy;
     int found_path=0,i;
-    t_pos start,treasure;
+    t_pos start,treasure,enemy;
     t_typeMove* sendmoves;
     debug=1;
 
@@ -242,9 +242,11 @@ int main()
     waitForLabyrinth( "ASTAR timeout=100 rotation=True", labName, &sizeX, &sizeY);
 	labData = (char*) malloc( sizeX * sizeY );
 	player = getLabyrinth( labData);
-/**Initialisation de la structure Data**/
+/**Initialisation de la structure Data du joueur et de l'adversaire**/
 	data=init_data(labData,sizeX,sizeY,player);
+	data_enemy=init_data(labData,sizeX,sizeY,!player);
 	data.map=labData;
+	data_enemy.map=labData;
 /**Liste de mouvement à effectuer pour arriver au tresor**/
     start.line=data.line;
     start.column=data.column;
@@ -257,11 +259,14 @@ int main()
     do{
         /* display the labyrinth */
         printLabyrinth();
-
+        enemy.column=data_enemy.column;
+        enemy.line=data_enemy.line;
+        dist_enemy=estim_distance(enemy,treasure);
         if (player==1)	/* The opponent plays */
           {
                 ret = getMove( &move);
                 update_lab(move,&data,sizeX,sizeY);
+                update_lab(move,&data_enemy,sizeX,sizeY);
                 if(move.type<4)
                 {
                     i=0;
@@ -277,10 +282,12 @@ int main()
                 i=i+1;
                 //else alea=move_player(&data,&move,labData,&jouer,sizeX,sizeY,rand()%9);
 
+
             }while(!jouer);
             move.type=alea;
             ret = sendMove(move);
             jouer=0;
+            printf("\nEnemyLine=%d et EnemyColumn=%d distance:%d\n",data_enemy.line,data_enemy.column,dist_enemy);
           }
           if ((player ==1 && ret == MOVE_WIN) || (player==0 && ret == MOVE_LOSE))
           printf("I lose the game\n");
