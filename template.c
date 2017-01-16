@@ -225,11 +225,11 @@ int main()
 	t_data data;//,data_enemy;						/* a move */
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
-    int alea,jouer=0,jouer2=0,path_index=0;
+    int alea,jouer=0,path_index=0;
     int column;
     int line;//,dist_enemy;
     int found_path=0,i;
-    t_pos start,treasure,enemy;
+    t_pos start,treasure;//,enemy;
     t_typeMove* sendmoves;
     debug=1;
 
