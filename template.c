@@ -125,7 +125,7 @@ int move_player(t_data* data,t_move* move,int *jouer ,int sizeX,int sizeY,t_type
             }break;
     default : printf(" ");
     }
-    move.type=alea;
+    move->type=alea;
     return alea;
 }
 
@@ -227,7 +227,7 @@ int main()
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0,jouer2=0,path_index=0;
     int column;
-    int line,dist_enemy;
+    int line;//,dist_enemy;
     int found_path=0,i;
     t_pos start,treasure,enemy;
     t_typeMove* sendmoves;
@@ -261,7 +261,9 @@ int main()
         printLabyrinth();
         enemy.column=data_enemy.column;
         enemy.line=data_enemy.line;
-        dist_enemy=estim_distance(enemy,treasure);
+        move.type=8;
+        move.value=0;
+        //dist_enemy=estim_distance(enemy,treasure);
         if (player==1)	/* The opponent plays */
           {
                 ret = getMove( &move);
