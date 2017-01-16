@@ -222,7 +222,7 @@ int main()
 	char* labData;						/* data of the labyrinth */
 	t_return_code ret = MOVE_OK;		/* indicates the status of the previous move */
 	t_move move;
-	t_data data,data_enemy;						/* a move */
+	t_data data;//,data_enemy;						/* a move */
 	int player;
 	int sizeX,sizeY;//sizeY numero de lignes et sizeX numero de colonnes
     int alea,jouer=0,jouer2=0,path_index=0;
@@ -244,9 +244,9 @@ int main()
 	player = getLabyrinth( labData);
 /**Initialisation de la structure Data du joueur et de l'adversaire**/
 	data=init_data(labData,sizeX,sizeY,player);
-	data_enemy=init_data(labData,sizeX,sizeY,!player);
+	//data_enemy=init_data(labData,sizeX,sizeY,!player);
 	data.map=labData;
-	data_enemy.map=labData;
+	//data_enemy.map=labData;
 /**Liste de mouvement à effectuer pour arriver au tresor**/
     start.line=data.line;
     start.column=data.column;
@@ -259,8 +259,8 @@ int main()
     do{
         /* display the labyrinth */
         printLabyrinth();
-        enemy.column=data_enemy.column;
-        enemy.line=data_enemy.line;
+        //enemy.column=data_enemy.column;
+        //enemy.line=data_enemy.line;
         move.type=8;
         move.value=0;
         //dist_enemy=estim_distance(enemy,treasure);
@@ -268,7 +268,7 @@ int main()
           {
                 ret = getMove( &move);
                 update_lab(move,&data,sizeX,sizeY);
-                move_player(&data_enemy,&move,&jouer2,sizeX,sizeY,move.type);
+                //move_player(&data_enemy,&move,&jouer2,sizeX,sizeY,move.type);
                 if(move.type<4)
                 {
                     i=0;
@@ -286,7 +286,7 @@ int main()
                 //{
                     //if(data.column-data.column_treas>0)
                 //}
-                update_lab(move,&data_enemy,sizeX,sizeY);
+                //update_lab(move,&data_enemy,sizeX,sizeY);
 
 
             }while(!jouer);
