@@ -7,8 +7,8 @@ typedef struct t_data
 {
     char** lab;
     char* map;
-    int line;//coordones x du jouer (lignes)
-    int column;//coordones y du jouer (colonnes)
+    int line;//coordones y du jouer (lignes)
+    int column;//coordones x du jouer (colonnes)
     int energy;
     int line_treas;
     int column_treas;
