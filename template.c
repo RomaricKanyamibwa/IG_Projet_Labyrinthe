@@ -125,7 +125,7 @@ int move_player(t_data* data,t_move* move,int *jouer ,int sizeX,int sizeY,t_type
             }break;
     default : printf(" ");
     }
-
+    move.type=alea;
     return alea;
 }
 
